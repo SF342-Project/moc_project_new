@@ -29,7 +29,7 @@ const Home = ({ navigation }) => {
         </View>
         <Text style={styles.Text}>บริการด้านการค้าภายในประเทศ</Text>
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('TongfahScreen')}>
+          <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('MapTongfah')}>
             <Image style={{ width: '78%', height: '50%', marginTop: 10, }} source={{ uri: 'https://play-lh.googleusercontent.com/WInYydpgoP1-qeoHZ4Ia9ybqU8sq_Mgn8XT0nJWNcuSxNBWb8xgauSFbzB55P1z7sA' }} />
             <Text style={styles.ButtonText}>
               สถานที่ร้านธงฟ้า
@@ -37,7 +37,7 @@ const Home = ({ navigation }) => {
             <Image style={{ width: '55%', height: '12%', }} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('ComparePrice')}>
-            <Image style={{ width: '55%', height: '50%', marginTop: 10, }} source={require('Price.png')} />
+            {/* <Image style={{ width: '55%', height: '50%', marginTop: 10, }} source={require('Price.png')} /> */}
             <Text style={styles.ButtonText}>
               เปรียบเทียบราคาสินค้า
             </Text>
@@ -48,7 +48,6 @@ const Home = ({ navigation }) => {
           <Text style={styles.logoutText}>LOG OUT</Text>
         </TouchableOpacity>
       </View>
-
     </SafeAreaView>
   );
 };

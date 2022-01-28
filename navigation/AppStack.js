@@ -4,6 +4,7 @@ import Home from "../screens/Homepage";
 import TongfahLocation from "../screens/TongfahLocation";
 
 import ComparePrice from "../screens/ComparePrice";
+import MapTongfah from "../screens/MapTongfah";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,11 @@ function AppStack() {
       <Stack.Screen
       name="ComparePrice"
       component={ComparePrice}
+      options={{header: () => null}}
+      />
+      <Stack.Screen
+      name="MapTongfah"
+      component={MapTongfah}
       options={{header: () => null}}
       />
     </Stack.Navigator>
