@@ -17,11 +17,13 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState();
   const { login } = useContext(AuthContext);
   return (
-    <SafeAreaView
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-
-      <View >
-        <Text style={styles.inputText}>Email</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.View}>
+        <Image source={require('../assests/images/logo.png')} style={styles.image} />
+        <Text style={styles.text}>กระทรวงพาณิชย์</Text>
+        <Text style={styles.subtext}>Ministry of Commerce</Text>
+        <Text style={styles.title}>เข้าสู่ระบบ</Text>
+        <Text style={styles.inputText}>EMAIL</Text>
         <Input
           style={styles.input}
           labelValue={email}
@@ -42,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
 
         <TouchableOpacity style={styles.loginButton} onPress={() => login(email, password)}>
           <Text style={styles.loginButtonText}>
-            LOG IN
+            เข้าสู่ระบบ
           </Text>
         </TouchableOpacity>
 
@@ -51,8 +53,12 @@ const LoginScreen = ({ navigation }) => {
 
 
       <TouchableOpacity>
-        <Text style={styles.text} onPress={() => navigation.navigate('RegisterScreen')}>
-          DONT'T HAVE ACCOUNT? SIGN UP
+        <Text style={{
+          color: '#0BA3FC',
+          fontWeight: 'bold',
+          fontSize: 15,
+        }} onPress={() => navigation.navigate('RegisterScreen')}>
+          สมัครสมาชิก
         </Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -60,21 +66,16 @@ const LoginScreen = ({ navigation }) => {
 }
 const styles = StyleSheet.create({
   inputText: {
-    color: '#000000',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
     alignSelf: 'flex-start',
-    marginLeft: 27,
   },
-
-
   title: {
-    color: '#00CABA',
-    textAlign: 'left',
-    fontSize: 35,
-    width: 320,
-    marginBottom: 1,
+    color: '#FFFFFF',
     fontWeight: 'bold',
+    fontSize: 25,
+    marginBottom: 20,
   },
   input: {
     marginVertical: 7,
@@ -92,8 +93,8 @@ const styles = StyleSheet.create({
 
   },
   loginButton: {
-    marginVertical: 20,
-    backgroundColor: '#fff',
+    marginVertical: 30,
+    backgroundColor: '#047FC7',
     width: 125,
     height: 40,
     borderRadius: 20,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     textAlign: 'center',
-    color: '#25ced1',
+    color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 18,
     marginTop: 6,
@@ -112,17 +113,30 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#E2FCFA',
+    backgroundColor: '#091D42',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 50,
   },
-
+  View: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   text: {
-    marginVertical: 25,
-    color: '#707070',
-    fontSize: 15,
+    color: "#fff",
+    fontSize: 25,
+    paddingTop: 15,
   },
+  subtext: {
+    color: "#047FC7",
+    paddingTop: 5,
+    marginBottom: 20,
+  },
+  image: {
+    marginTop: 50,
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+  }
 });
+
 
 export default LoginScreen;
