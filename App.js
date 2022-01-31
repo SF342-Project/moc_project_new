@@ -19,6 +19,8 @@ import {
 } from 'react-native';
 
 import Providers  from './navigation/Index';
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs();
 
 const App = () => {
 

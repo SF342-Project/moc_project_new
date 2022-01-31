@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const mock_data = require('./mock_data/product.json')
 var _ = require("underscore");
+const axios = require('axios');
 
 app.get('/products', (req, res) => {
     res.send(mock_data)
@@ -25,6 +26,12 @@ function findKeyword(kw){
 app.get('/product/keyword/:keyword',(req,res) =>{
     var filtered = findKeyword(req.params.keyword);
     res.send(filtered)
+})
+
+app.get('/Shops',(req,res) => {
+    axios.get('https://shop-mock-rest-api.herokuapp.com/Shop').then((response) => {
+        res.send(response)
+    })
 })
 
 app.listen(3000, () => {
