@@ -1,8 +1,11 @@
-import {View, Text, StyleSheet} from 'react-native';
+
 import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import useFetch from '../components/useFetch';
 import {FlatList} from 'react-native-gesture-handler';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import BottomSheet from 'react-native-simple-bottom-sheet';
 
 export default function MapTongfah() {
   const API_URL = 'http://10.0.2.2:9000/Shop';
@@ -19,35 +22,51 @@ export default function MapTongfah() {
   }, []);
 
   return (
-    <MapView
-      provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-      style={styles.map}
-      region={{
-        latitude: 13.91723,
-        longitude: 100.37246,
-        latitudeDelta: 0.15,
-        longitudeDelta: 0.15,
-      }}>
-      {data.map((marker, index) => {
-        return (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: marker.Latitude,
-              longitude: marker.Longitude,
-            }}
-            image={require('../assests/images/map_marker.png')}
-          />
-        );
-      })}
-      <Marker
-        coordinate={{
-          latitude: 13.916459,
-          longitude: 100.421607,
-        }}
-        image={require('../assests/images/map_marker.png')}
-      />
-    </MapView>
+    <SafeAreaProvider>
+      <MapView
+        provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+        style={styles.map}
+        region={{
+          latitude: 13.91723,
+          longitude: 100.37246,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}>
+        {data.map((marker, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: marker.Latitude,
+                longitude: marker.Longitude,
+              }}
+              image={require('../assests/images/map_marker.png')}
+            />
+          );
+        })}
+      </MapView>
+      <View style={styles.searchBox}>
+        <TextInput 
+          placeholder="Search here"
+          placeholderTextColor="#000"
+          autoCapitalize="none"
+          style={{flex:1,padding:0}}
+        />
+        
+      </View>
+      <BottomSheet isOpen>
+        <FlatList
+          data={data}
+          renderItem={({item}) => (
+            <TouchableOpacity style={styles.Flatstyle}>
+              <Text>{item.ShopName}</Text>
+              <Text>{item.address}</Text>
+              <Text>{item.Contact}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      </BottomSheet>
+    </SafeAreaProvider>
   );
 }
 
@@ -55,4 +74,39 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  searchBox: {
+    position: 'absolute',
+    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    width: '90%',
+    alignSelf: 'center',
+    borderRadius: 5,
+    padding: 10,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+  },
+  signIn: {
+    width: '100%',
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 3,
+  },
+  textSign: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  Flatstyle: {
+    marginHorizontal: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 10,
+  },
+
 });

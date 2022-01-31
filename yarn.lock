@@ -6943,6 +6943,13 @@
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
 
+"react-native-simple-bottom-sheet@^1.0.3":
+  "integrity" "sha512-ulg7NOfVbFxJxvTLwQUbtEOW4HLfyMchgnVjmjDGfoMF/Gr2Kx4YJjDXA394Ub78hN8/R2URStvVxh6Sy5TbAw=="
+  "resolved" "https://registry.npmjs.org/react-native-simple-bottom-sheet/-/react-native-simple-bottom-sheet-1.0.3.tgz"
+  "version" "1.0.3"
+  dependencies:
+    "prop-types" "^15.7.2"
+
 "react-native-svg@^12.1.1", "react-native-svg@12.1.0":
   "integrity" "sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
