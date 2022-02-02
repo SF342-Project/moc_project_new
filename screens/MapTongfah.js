@@ -1,6 +1,11 @@
-
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import useFetch from '../components/useFetch';
 import {FlatList} from 'react-native-gesture-handler';
@@ -10,16 +15,38 @@ import BottomSheet from 'react-native-simple-bottom-sheet';
 export default function MapTongfah() {
   const API_URL = 'http://10.0.2.2:9000/Shop';
 
-  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [filterdata, setFilterdata] = useState([]);
+
+  // useEffect(() => {
+  //   fetch(API_URL)
+  //     .then(response => response.json())
+  //     .then(json => setData(json))
+  //     .then(json => setFilterdata(json))
+  //     .catch(error => alert(error))
+  // }, []);
+
+  const getData = async () => {
+    const response = await fetch(API_URL);
+    const fetchdata = await response.json();
+    setData(fetchdata);
+    setFilterdata(fetchdata);
+  };
 
   useEffect(() => {
-    fetch(API_URL)
-      .then(response => response.json())
-      .then(json => setData(json))
-      .catch(error => alert(error))
-      .finally(setLoading(false));
-  }, []);
+    getData();
+  }, [API_URL]);
+
+  const onChangeText = text => {
+    setFilterdata(
+      data.filter(
+        i =>
+          i.Contact.includes(text) ||
+          i.address.includes(text) ||
+          i.ShopName.includes(text),
+      ),
+    );
+  };
 
   return (
     <SafeAreaProvider>
@@ -32,7 +59,7 @@ export default function MapTongfah() {
           latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         }}>
-        {data.map((marker, index) => {
+        {filterdata.map((marker, index) => {
           return (
             <Marker
               key={index}
@@ -46,23 +73,32 @@ export default function MapTongfah() {
         })}
       </MapView>
       <View style={styles.searchBox}>
-        <TextInput 
+        <TextInput
           placeholder="Search here"
           placeholderTextColor="#000"
           autoCapitalize="none"
-          style={{flex:1,padding:0}}
+          style={{flex: 1, padding: 0}}
+          onChangeText={text => onChangeText(text)}
         />
-        
       </View>
       <BottomSheet isOpen>
         <FlatList
-          data={data}
+          data={filterdata}
           renderItem={({item}) => (
             <TouchableOpacity style={styles.Flatstyle}>
               <Text>{item.ShopName}</Text>
               <Text>{item.address}</Text>
               <Text>{item.Contact}</Text>
             </TouchableOpacity>
+          )}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text>ไม่มีข้อมูล</Text>
+            </View>
           )}
         />
       </BottomSheet>
@@ -108,5 +144,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-
 });
