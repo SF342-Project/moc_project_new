@@ -25,7 +25,7 @@ const RegisterScreen = () => {
       <View style={styles.View}>
       <View style={{ alignItems: 'center' }}>
         <View style={{ flexDirection: 'row' }}>
-          <Image source={require('../assests/images/logo.png')} style={styles.image} />
+          <Image source={require('../assets/images/logo.png')} style={styles.image} />
           <View style={{ flexDirection: 'column' }}>
             <Text style={styles.text}>กระทรวงพาณิชย์</Text>
             <Text style={styles.subtext}>Ministry of Commerce</Text>

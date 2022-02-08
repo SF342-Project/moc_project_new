@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Component} from 'react/cjs/react.production.min';
 import {FlatList} from 'react-native-gesture-handler';
-import data from '../assests/data/bangkok.json';
+import data from '../assets/data/bangkok.json';
 
 export default class TongfahLocation extends Component {
   constructor(props) {

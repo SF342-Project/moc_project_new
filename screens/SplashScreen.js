@@ -9,7 +9,7 @@ export default function SplashScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.View}>
-      <Image source={require('../assests/images/logo.png')} style={styles.image}/>
+      <Image source={require('../assets/images/logo.png')} style={styles.image}/>
         <Text style={styles.text}>กระทรวงพาณิชย์</Text>
         <Text style={styles.subtext}>Ministry of Commerce</Text>
       </View>

@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
   Text: {
     textAlign: 'center',
     color: '#000000',
-    fontWeight: 'bold',
     fontSize: 20,
     padding: 15,
+    fontFamily: "Prompt-Bold"
   },
 
   container: {
