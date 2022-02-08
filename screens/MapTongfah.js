@@ -45,10 +45,10 @@ export default function MapTongfah() {
 
   const intitialMapState = {
     region: {
-      latitude: 13.91723,
-      longitude: 100.37246,
-      latitudeDelta: 0.02,
-      longitudeDelta: 0.02,
+      latitude: 13.916459,
+      longitude: 100.420607,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.015,
     },
   };
 
