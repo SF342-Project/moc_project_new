@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Image,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import useFetch from '../components/useFetch';
@@ -13,7 +14,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import AppLoader from './AppLoader';
 
-export default function MapTongfah() {
+export default function MapTongfah({navigation}) {
   const API_URL = 'http://10.0.2.2:9000/Shop';
 
   const [data, setData] = useState([]);
@@ -52,15 +53,14 @@ export default function MapTongfah() {
     },
   };
 
-  const onPressButton = (item) => {
+  const onPressButton = item => {
     _map.current.animateToRegion({
       latitude: item.Latitude,
       longitude: item.Longitude,
       latitudeDelta: state.region.latitudeDelta,
-      longitudeDelta: state.region.longitudeDelta
-    })
-
-  }
+      longitudeDelta: state.region.longitudeDelta,
+    });
+  };
 
   const [state, setState] = useState(intitialMapState);
   const _map = React.useRef(null);
@@ -77,6 +77,7 @@ export default function MapTongfah() {
             return (
               <Marker
                 key={index}
+                tracksViewChanges={false}
                 coordinate={{
                   latitude: marker.Latitude,
                   longitude: marker.Longitude,
@@ -85,24 +86,37 @@ export default function MapTongfah() {
                 title={marker.ShopName}
                 description={marker.address}
               />
-
             );
           })}
         </MapView>
-        <View style={styles.searchBox}>
-          <TextInput
-            placeholder="Search here"
-            placeholderTextColor="#000"
-            autoCapitalize="none"
-            style={{flex: 1, padding: 0}}
-            onChangeText={text => onChangeText(text)}
-          />
+        <View>
+          <View style={{paddingTop: 30}}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={require('../assets/images/left-arrow.png')}
+                style={{width: 30, height: 30}}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.searchBox}>
+            <TextInput
+              placeholder="ค้นหา... เช่น ชื่อจังหวัด, ชื่อสถานที่"
+              placeholderTextColor="gray"
+              autoCapitalize="none"
+              style={styles.TextInput}
+              onChangeText={text => onChangeText(text)}
+            />
+          </View>
         </View>
+
         <BottomSheet isOpen>
           <FlatList
             data={filterdata}
             renderItem={({item}) => (
-              <TouchableOpacity style={styles.Flatstyle} onPress={() => onPressButton(item)}>
+              <TouchableOpacity
+                style={styles.Flatstyle}
+                onPress={() => onPressButton(item)}>
                 <Text style={styles.Text}>{item.ShopName}</Text>
                 <Text style={styles.Text}>{item.address}</Text>
                 <Text style={styles.Text}>{item.Contact}</Text>
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? 40 : 20,
     flexDirection: 'row',
     backgroundColor: '#fff',
-    width: '90%',
+    width: '80%',
     alignSelf: 'center',
     borderRadius: 5,
     padding: 10,
@@ -143,6 +157,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
+   
   },
   signIn: {
     width: '100%',
@@ -176,5 +191,12 @@ const styles = StyleSheet.create({
 
   Text: {
     fontFamily: 'Prompt-Regular',
+  },
+
+  TextInput: {
+    fontFamily: 'Prompt-Regular',
+    flex: 1,
+    padding: 0,
+    
   },
 });
