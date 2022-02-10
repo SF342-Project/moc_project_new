@@ -1,39 +1,23 @@
+const mongoose = require('mongoose')
 const express = require('express')
+const bodyParser = require('body-parser')
+
 const app = express()
-const mock_data = require('./mock_data/product.json')
-var _ = require("underscore");
-const axios = require('axios');
+const mongo_url = 'mongodb+srv://team_user:20012544@mocproject.jdugn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const port = 4000
 
-app.get('/products', (req, res) => {
-    res.send(mock_data)
+
+mongoose.connect(mongo_url,{
+    useNewUrlParser: true,
 })
 
-app.get('/product/:id',(req,res) =>{
-    var filtered = _.where(mock_data,{'id':req.params.id})
-    res.send(filtered)
+const db = mongoose.connection;
+db.once('open',()=>{
+    console.log('Connected to MongoDB....');
 })
 
-function findKeyword(kw){
-    var result=[];
-    for(var i = 0; i<mock_data.length;i++){
-        if(mock_data[i].name.indexOf(kw) > -1){
-            result.push(mock_data[i])
-        }
-    }
-    return result;
-}
+app.use(bodyParser.json());
+const ProductRoute = require('./routes/Products')
+app.use('/product',ProductRoute)
 
-app.get('/product/keyword/:keyword',(req,res) =>{
-    var filtered = findKeyword(req.params.keyword);
-    res.send(filtered)
-})
-
-app.get('/Shops',(req,res) => {
-    axios.get('https://shop-mock-rest-api.herokuapp.com/Shop').then((response) => {
-        res.send(response)
-    })
-})
-
-app.listen(3000, () => {
-  console.log('Start server at port 3000.')
-})
+app.listen(port,console.log("Listening on port: 127.0.0.1:",port))
