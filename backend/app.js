@@ -18,6 +18,6 @@ db.once('open',()=>{
 
 app.use(bodyParser.json());
 const ProductRoute = require('./routes/Products')
-app.use('/product',ProductRoute)
+app.use('/products',ProductRoute)
 
 app.listen(port,console.log("Listening on port: 127.0.0.1:",port))
