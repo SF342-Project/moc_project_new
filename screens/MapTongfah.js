@@ -112,14 +112,45 @@ export default function MapTongfah({navigation}) {
 
         <BottomSheet isOpen>
           <FlatList
+            
             data={filterdata}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={styles.Flatstyle}
+                style={{
+                  backgroundColor: '#DEE1EC',
+                  margin: 3,
+                  marginBottom: 10,
+                  borderColor: '#0A214A',
+                  padding: 7,
+                  borderWidth: 3,
+                  borderRadius: 10,
+                
+                }}
                 onPress={() => onPressButton(item)}>
-                <Text style={styles.Text}>{item.ShopName}</Text>
-                <Text style={styles.Text}>{item.address}</Text>
-                <Text style={styles.Text}>{item.Contact}</Text>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: '#787A91'}}>
+                  ชื่อร้านค้า
+                </Text>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: '#0A214A'}}>
+                  {item.ShopName}
+                </Text>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: '#787A91'}}>
+                  ที่อยู่ร้านค้า
+                </Text>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: '#0A214A'}}>
+                  {item.address}
+                </Text>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: '#787A91'}}>
+                  ช่องทางการติดต่อ
+                </Text>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: '#0A214A'}}>
+                  {item.Contact}
+                </Text>
               </TouchableOpacity>
             )}
             ListEmptyComponent={() => (
@@ -157,7 +188,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
-   
   },
   signIn: {
     width: '100%',
@@ -197,6 +227,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Prompt-Regular',
     flex: 1,
     padding: 0,
-    
   },
 });
