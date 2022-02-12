@@ -48,10 +48,25 @@ export default function MapTongfah({navigation}) {
     region: {
       latitude: 13.916459,
       longitude: 100.420607,
-      latitudeDelta: 0.015,
-      longitudeDelta: 0.015,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
     },
   };
+
+  const FlatListItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          alignSelf:"center",
+          backgroundColor: "#ebebeb",
+          marginTop: 15,
+          marginBottom: 20,
+        }}
+      />
+    );
+  }
 
   const onPressButton = item => {
     _map.current.animateToRegion({
@@ -89,19 +104,19 @@ export default function MapTongfah({navigation}) {
             );
           })}
         </MapView>
-        <View>
+        <View style={{ flexDirection: "row" }}>
           <View style={{paddingTop: 30}}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={require('../assets/images/left-arrow.png')}
-                style={{width: 30, height: 30}}
+                style={{width: 30, height: 30, marginBottom: 5, marginLeft: 5}}
               />
             </TouchableOpacity>
           </View>
 
           <View style={styles.searchBox}>
             <TextInput
-              placeholder="ค้นหา... เช่น ชื่อจังหวัด, ชื่อสถานที่"
+              placeholder="ชื่อร้าน, จังหวัด, เขต, ...."
               placeholderTextColor="gray"
               autoCapitalize="none"
               style={styles.TextInput}
@@ -112,46 +127,22 @@ export default function MapTongfah({navigation}) {
 
         <BottomSheet isOpen>
           <FlatList
-            
             data={filterdata}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={{
-                  backgroundColor: '#DEE1EC',
-                  margin: 3,
-                  marginBottom: 10,
-                  borderColor: '#0A214A',
-                  padding: 7,
-                  borderWidth: 3,
-                  borderRadius: 10,
-                
-                }}
-                onPress={() => onPressButton(item)}>
-                <Text
-                  style={{fontSize: 17, fontWeight: 'bold', color: '#787A91'}}>
-                  ชื่อร้านค้า
-                </Text>
-                <Text
-                  style={{fontSize: 17, fontWeight: 'bold', color: '#0A214A'}}>
-                  {item.ShopName}
-                </Text>
-                <Text
-                  style={{fontSize: 17, fontWeight: 'bold', color: '#787A91'}}>
-                  ที่อยู่ร้านค้า
-                </Text>
-                <Text
-                  style={{fontSize: 17, fontWeight: 'bold', color: '#0A214A'}}>
-                  {item.address}
-                </Text>
-                <Text
-                  style={{fontSize: 17, fontWeight: 'bold', color: '#787A91'}}>
-                  ช่องทางการติดต่อ
-                </Text>
-                <Text
-                  style={{fontSize: 17, fontWeight: 'bold', color: '#0A214A'}}>
-                  {item.Contact}
-                </Text>
-              </TouchableOpacity>
+            ItemSeparatorComponent = { FlatListItemSeparator }
+            renderItem={({item, index}) => (
+              <View>
+                <TouchableOpacity
+                  style={{
+                    borderColor: '#fff',
+                    marginBottom: 10,
+                    borderRadius: 10,
+                  }}
+                  onPress={() => onPressButton(item)}>
+                  <Text style={styles.FlatListHead}>{item.ShopName}</Text>
+                  <Text style={styles.fontReg}>{item.address}</Text>
+                  <Text style={styles.fontReg}>{item.Contact}</Text>
+                </TouchableOpacity>
+              </View>
             )}
             ListEmptyComponent={() => (
               <View
@@ -159,7 +150,7 @@ export default function MapTongfah({navigation}) {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Text style={styles.Text}>ไม่มีข้อมูล</Text>
+                <Text style={styles.fontReg}>ไม่มีข้อมูล</Text>
               </View>
             )}
           />
@@ -174,15 +165,18 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  FlatListHead: {
+    fontSize: 17,
+    fontFamily: 'Prompt-Bold',
+  },
   searchBox: {
-    position: 'absolute',
     marginTop: Platform.OS === 'ios' ? 40 : 20,
-    flexDirection: 'row',
     backgroundColor: '#fff',
-    width: '80%',
+    width: '83%',
     alignSelf: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
+    marginLeft: 10,
     shadowColor: '#ccc',
     shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.5,
@@ -219,7 +213,7 @@ const styles = StyleSheet.create({
     width: 150,
   },
 
-  Text: {
+  fontReg: {
     fontFamily: 'Prompt-Regular',
   },
 

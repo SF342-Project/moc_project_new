@@ -7,31 +7,91 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  TextInput,
 } from 'react-native';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import ProductCard from '../components/ProductCard';
 import useFetch from '../components/useFetch';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function ComparePrice({navigation}) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const productURL = 'http://10.0.2.2:4000/products/keyword/' + value;
+  const priceURL = "https://dataapi.moc.go.th/gis-product-prices?product_id=P11001&from_date=2022-01-01&to_date=2024-01-28"
 
-  const {data} = useFetch(productURL);
+  const {data} = useFetch(productURL);  
 
-  const path = [{
-      สุกร: 'สุกร.png',
-  }]
+  const testData = [
+    {
+      product_name: 'สุกรชำแหละ เนื้อแดง สะโพก',
+      price_max: 260.0,
+      unit: 'บาท/กก.',
+      price_list: [
+        {
+          date: '2022-01-14T00:00:00',
+          price_min: 250.0,
+          price_max: 260.0,
+        },
+      ],
+    },
+    {
+      product_name: 'เนื้อโค ธรรมดา',
+      price_max: 260.0,
+      unit: 'บาท/กก.',
+      price_list: [
+        {
+          date: '2022-01-14T00:00:00',
+          price_min: 250.0,
+          price_max: 260.0,
+        },
+      ],
+    },
+    {
+      product_name: 'เนื้อโค ธรรมดา',
+      price_max: 260.0,
+      unit: 'บาท/กก.',
+      price_list: [
+        {
+          date: '2022-01-14T00:00:00',
+          price_min: 250.0,
+          price_max: 260.0,
+        },
+      ],
+    },
+    {
+      product_name: 'เนื้อโค ธรรมดา',
+      price_max: 260.0,
+      unit: 'บาท/กก.',
+      price_list: [
+        {
+          date: '2022-01-14T00:00:00',
+          price_min: 250.0,
+          price_max: 260.0,
+        },
+      ],
+    },
+    {
+      product_name: 'เนื้อโค ธรรมดา',
+      price_max: 260.0,
+      unit: 'บาท/กก.',
+      price_list: [
+        {
+          date: '2022-01-14T00:00:00',
+          price_min: 250.0,
+          price_max: 260.0,
+        },
+      ],
+    },
+  ];
 
-  const [items, setItems] = useState([
-    {label: 'เนื้อหมู', value: 'สุกร'},
-    {label: 'เนื้อไก่', value: 'ไก่สด'},
-    {label: 'กุ้ง', value: 'กุ้ง'},
-    {label: 'ไข่ไก่', value: 'ไข่ไก่'},
-  ]);
-
-  console.log(path.value)
+  const formatDate = date => {
+    let year = date.split('T')[0].split('-')[0];
+    let month = date.split('T')[0].split('-')[1];
+    let day = date.split('T')[0].split('-')[2];
+    return 'ข้อมูลล่าสุด ณ วันที่ ' + day + '/' + month + '/' + year;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,13 +103,20 @@ export default function ComparePrice({navigation}) {
               style={styles.Image}
             />
           </TouchableOpacity>
-          <Text style={styles.welcome}>เปรียบเทียบราคาสินค้า</Text>
+          <Text style={styles.welcome}>เลือกรายการสินค้า</Text>
         </View>
-        <View style={{flexDirection: 'row'}}></View>
+        <View style={styles.searchBox}>
+          <TextInput
+            placeholder="ค้นหาสินค้า"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.TextInput}
+          />
+        </View>
       </View>
 
       <View style={styles.Content}>
-        <Text style={styles.HeaderContent}>เลือกประเภทสินค้า</Text>
+        {/* <Text style={styles.HeaderContent}>เลือกประเภทสินค้า</Text>
         <DropDownPicker
           placeholder="เลือกสินค้า"
           open={open}
@@ -66,20 +133,34 @@ export default function ComparePrice({navigation}) {
             fontFamily: 'Prompt-Regular',
           }}
           listParentLabelStyle={styles.DropdownLable}
-        />
-        <Text style={styles.HeaderContent}>รายการสินค้า</Text>
+        /> */}
+        {/* <Text style={styles.HeaderContent}>รายการสินค้า</Text> */}
         <FlatList
-          data={data}
+          data={testData}
           renderItem={({item}) => {
+            let date = formatDate(item.price_list[0].date);
             return (
-              <View style={styles.card}>
-                <Text style={styles.notes}>{item.name}</Text>
-                <Image
-                  source={require('../assets/images/product_image/สุกร.png')}
-                  style={styles.Image}
-                />
-                
-              </View>
+              <TouchableOpacity style={styles.card}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 0.65}}>
+                    <Text style={styles.Headnotes}>{item.product_name}</Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={styles.CardPrice}>
+                        {item.price_list[0].price_max}
+                      </Text>
+                      <Text style={styles.CardUnit}>{item.unit}</Text>
+                    </View>
+
+                    <Text style={styles.CardDate}>{date}</Text>
+                  </View>
+                  <View style={{flex: 0.30}}>
+                    <Image
+                      source={require('../assets/images/product_image/Cow.png')}
+                      style={styles.CardImage}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
             );
           }}
           ListEmptyComponent={() => (
@@ -99,17 +180,59 @@ export default function ComparePrice({navigation}) {
 
 const styles = StyleSheet.create({
   Content: {},
-  notes: {
-    fontSize: 18,
+  searchBox: {
+    marginTop: 10,
+    backgroundColor: '#fff',
+    width: '95%',
+    alignSelf: 'center',
+    borderRadius: 10,
+    padding: 5,
+    marginBottom: 10,
+  },
+  TextInput: {
+    fontFamily: 'Prompt-Regular',
+    padding: 0,
+  },
+  Headnotes: {
+    fontSize: 15,
+    fontFamily: 'Prompt-Bold',
+    textAlign: 'left',
     color: '#fff',
-    textTransform: 'capitalize',
+  },
+  CardUnit: {
+    fontFamily: 'Prompt-Bold',
+    fontSize: 20,
+    top: 20,
+    left: 5,
+    textAlign: 'center',
+    color: '#fff',
+  },
+  CardPrice: {
+    fontFamily: 'Prompt-Bold',
+    fontSize: 40,
+    padding: 0,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#ffcc00',
+  },
+  CardImage: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'contain',
+  },
+  CardDate: {
+    fontFamily: 'Prompt-Regular',
+    fontSize: 10,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#fff',
   },
   card: {
-    backgroundColor: 'rgba(56, 172, 236, 1)',
-    borderWidth: 0,
-    borderRadius: 20,
+    borderRadius: 15,
+    backgroundColor: '#2752e6',
     margin: 10,
-    padding: 10
+    padding: 15,
   },
   HeaderContent: {
     marginTop: 15,
@@ -148,7 +271,6 @@ const styles = StyleSheet.create({
   Image: {
     marginTop: 15,
     marginLeft: 5,
-    marginBottom: 15,
     width: 30,
     height: 30,
   },
@@ -159,7 +281,6 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
     marginTop: 15,
     marginLeft: 15,
-    marginBottom: 15,
     fontFamily: 'Prompt-Bold',
     fontSize: 20,
     color: '#FFFFFF',

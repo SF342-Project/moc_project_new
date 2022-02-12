@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }) => {
       <TouchableOpacity>
         <Text style={{
           color: '#0BA3FC',
-          fontWeight: 'bold',
+          fontFamily: 'Prompt-Bold',
           fontSize: 15,
         }} onPress={() => navigation.navigate('RegisterScreen')}>
           สมัครสมาชิก
@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
   inputText: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Prompt-Bold',
     alignSelf: 'flex-start',
   },
   title: {
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontFamily: 'Prompt-Bold',
     fontSize: 25,
     marginBottom: 20,
   },
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     textAlign: 'center',
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontFamily: 'Prompt-Bold',
     fontSize: 18,
     marginTop: 6,
   },
@@ -124,11 +124,13 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 25,
     paddingTop: 15,
+    fontFamily: 'Prompt-Regular',
   },
   subtext: {
     color: "#047FC7",
     paddingTop: 5,
     marginBottom: 20,
+    fontFamily: 'Prompt-Regular',
   },
   image: {
     marginTop: 50,
