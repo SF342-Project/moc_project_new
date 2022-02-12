@@ -12,6 +12,8 @@ import useFetch from '../components/useFetch';
 import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BottomSheet from 'react-native-simple-bottom-sheet';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import AppLoader from './AppLoader';
 
 export default function MapTongfah({navigation}) {
@@ -58,15 +60,15 @@ export default function MapTongfah({navigation}) {
       <View
         style={{
           height: 1,
-          width: "100%",
-          alignSelf:"center",
-          backgroundColor: "#ebebeb",
+          width: '100%',
+          alignSelf: 'center',
+          backgroundColor: '#ebebeb',
           marginTop: 15,
           marginBottom: 20,
         }}
       />
     );
-  }
+  };
 
   const onPressButton = item => {
     _map.current.animateToRegion({
@@ -104,13 +106,14 @@ export default function MapTongfah({navigation}) {
             );
           })}
         </MapView>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{flexDirection: 'row'}}>
           <View style={{paddingTop: 30}}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                source={require('../assets/images/left-arrow.png')}
-                style={{width: 30, height: 30, marginBottom: 5, marginLeft: 5}}
-              />
+              <Entypo
+                name="chevron-thin-left"
+                size={30}
+                style={styles.Image}
+                color={'#000'}></Entypo>
             </TouchableOpacity>
           </View>
 
@@ -128,7 +131,7 @@ export default function MapTongfah({navigation}) {
         <BottomSheet isOpen>
           <FlatList
             data={filterdata}
-            ItemSeparatorComponent = { FlatListItemSeparator }
+            ItemSeparatorComponent={FlatListItemSeparator}
             renderItem={({item, index}) => (
               <View>
                 <TouchableOpacity
@@ -138,9 +141,25 @@ export default function MapTongfah({navigation}) {
                     borderRadius: 10,
                   }}
                   onPress={() => onPressButton(item)}>
-                  <Text style={styles.FlatListHead}>{item.ShopName}</Text>
-                  <Text style={styles.fontReg}>{item.address}</Text>
-                  <Text style={styles.fontReg}>{item.Contact}</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.9}}>
+                      <Text style={styles.FlatListHead}>{item.ShopName}</Text>
+                      <Text style={styles.fontReg}>{item.address}</Text>
+                      <Text style={styles.fontReg}>{item.Contact}</Text>
+                    </View>
+                    <View style={{flex: 0.1}}>
+                    <TouchableOpacity>
+                      <Icon
+                        name="bookmark"
+                        size={30}
+                        color={'#2752E6'}
+                        style={{alignSelf: 'flex-end'}}
+                        
+                      />
+                    </TouchableOpacity>
+                      
+                    </View>
+                  </View>
                 </TouchableOpacity>
               </View>
             )}
@@ -193,6 +212,10 @@ const styles = StyleSheet.create({
   textSign: {
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  Image: {
+    marginBottom: 5,
+    marginLeft: 5,
   },
   Flatstyle: {
     marginHorizontal: 10,

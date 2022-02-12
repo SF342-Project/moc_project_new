@@ -36,7 +36,7 @@ const Home = ({ navigation }) => {
             </Text>
             <Image style={{ width: '55%', height: '12%', }} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('ComparePrice')}>
+          <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('ProductLists')}>
             {/* <Image style={{ width: '55%', height: '50%', marginTop: 10, }} source={require('Price.png')} /> */}
             <Text style={styles.ButtonText}>
               เปรียบเทียบราคาสินค้า

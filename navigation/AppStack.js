@@ -3,8 +3,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Home from "../screens/Homepage";
 import TongfahLocation from "../screens/TongfahLocation";
 
-import ComparePrice from "../screens/ComparePrice";
+import ProductLists from "../screens/ProductLists";
 import MapTongfah from "../screens/MapTongfah";
+import ComparePrice from "../screens/ComparePrice";
 
 const Stack = createStackNavigator();
 
@@ -31,14 +32,19 @@ function AppStack() {
       }}
       />
       <Stack.Screen
-      name="ComparePrice"
-      component={ComparePrice}
+      name="ProductLists"
+      component={ProductLists}
       options={{header: () => null}}
       />
       <Stack.Screen
       name="MapTongfah"
       component={MapTongfah}
       options={{header: () => null}}
+      />
+      <Stack.Screen
+        name="ComparePrice"
+        component={ComparePrice}
+        options={{header: () => null}}
       />
     </Stack.Navigator>
   );
