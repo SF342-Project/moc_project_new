@@ -15,15 +15,15 @@ import ProductCard from '../components/ProductCard';
 import useFetch from '../components/useFetch';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
+import AppLoader from './AppLoader';
+import {include} from 'underscore';
 
 export default function ProductLists({navigation}) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const productURL = 'http://10.0.2.2:4000/products/keyword/' + value;
-  const priceURL =
-    'https://dataapi.moc.go.th/gis-product-prices?product_id=P11001&from_date=2022-01-01&to_date=2024-01-28';
+  const [value, setValue] = useState('');
+  const productURL = 'http://10.0.2.2:4000/products/keyword?keyword=' + value;
 
-  const {data} = useFetch(productURL);
+  const {data, loading} = useFetch(productURL);
 
   const testData = [
     {
@@ -87,7 +87,6 @@ export default function ProductLists({navigation}) {
       ],
     },
   ];
-
   const formatDate = date => {
     let year = date.split('T')[0].split('-')[0];
     let month = date.split('T')[0].split('-')[1];
@@ -96,30 +95,32 @@ export default function ProductLists({navigation}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.profile}>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Entypo
-              name="chevron-thin-left"
-              size={30}
-              style={styles.Image}
-              color={'#fff'}></Entypo>
-          </TouchableOpacity>
-          <Text style={styles.welcome}>เลือกรายการสินค้า</Text>
+    <>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.profile}>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Entypo
+                name="chevron-thin-left"
+                size={30}
+                style={styles.Image}
+                color={'#fff'}></Entypo>
+            </TouchableOpacity>
+            <Text style={styles.welcome}>เลือกรายการสินค้า</Text>
+          </View>
+          <View style={styles.searchBox}>
+            <TextInput
+              placeholder="ค้นหาสินค้า"
+              placeholderTextColor="gray"
+              autoCapitalize="none"
+              style={styles.TextInput}
+              onChangeText={text => setValue(text)}
+            />
+          </View>
         </View>
-        <View style={styles.searchBox}>
-          <TextInput
-            placeholder="ค้นหาสินค้า"
-            placeholderTextColor="gray"
-            autoCapitalize="none"
-            style={styles.TextInput}
-          />
-        </View>
-      </View>
 
-      <View style={styles.Content}>
-        {/* <Text style={styles.HeaderContent}>เลือกประเภทสินค้า</Text>
+        <View style={styles.Content}>
+          {/* <Text style={styles.HeaderContent}>เลือกประเภทสินค้า</Text>
         <DropDownPicker
           placeholder="เลือกสินค้า"
           open={open}
@@ -137,18 +138,34 @@ export default function ProductLists({navigation}) {
           }}
           listParentLabelStyle={styles.DropdownLable}
         /> */}
-        {/* <Text style={styles.HeaderContent}>รายการสินค้า</Text> */}
-        <FlatList
-          data={testData}
-          renderItem={({item}) => {
-            let date = formatDate(item.price_list[0].date);
-            return (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() =>
-                  navigation.navigate('ComparePrice', {name: item.product_name})
-                }>
-                <View style={{flexDirection: 'row'}}>
+          {/* <Text style={styles.HeaderContent}>รายการสินค้า</Text> */}
+          <FlatList
+            data={data}
+            renderItem={({item}) => {
+              // let date = formatDate(item.price_list[0].date);
+              let path = '';
+              switch (item.name) {
+                case include('สุกร'):
+                  path = '../assets/images/product_image/Pig.png';
+                  break;
+
+                case include('เนื้อโค'):
+                  path = '../assets/images/product_image/Cow.png';
+                  break;
+
+                default:
+                  break;
+              }
+              return (
+                <TouchableOpacity
+                  style={styles.card}
+                  onPress={() =>
+                    navigation.navigate('ComparePrice', {
+                      name: item.name,
+                      id: item.id,
+                    })
+                  }>
+                  {/* <View style={{flexDirection: 'row'}}>
                   <View style={{flex: 0.65}}>
                     <Text style={styles.Headnotes}>{item.product_name}</Text>
                     <View style={{flexDirection: 'row'}}>
@@ -166,22 +183,37 @@ export default function ProductLists({navigation}) {
                       style={styles.CardImage}
                     />
                   </View>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-          ListEmptyComponent={() => (
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text>ไม่มีข้อมูล</Text>
-            </View>
-          )}
-        />
-      </View>
-    </SafeAreaView>
+                </View> */}
+
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.8}}>
+                      <Text style={styles.Headnotes}>{item.name}</Text>
+                      <Text style={styles.CardDate}>รหัสสินค้า: {item.id}</Text>
+                    </View>
+                    <View style={{flex: 0.2}}>
+                      <Image
+                        source={require('../assets/images/logo.png')}
+                        style={styles.CardImage}
+                      />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+            ListEmptyComponent={() => (
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={styles.Text}>ไม่มีข้อมูล</Text>
+              </View>
+            )}
+          />
+        </View>
+      </SafeAreaView>
+      {loading ? <AppLoader /> : null}
+    </>
   );
 }
 
@@ -201,7 +233,7 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   Headnotes: {
-    fontSize: 15,
+    fontSize: 18,
     fontFamily: 'Prompt-Bold',
     textAlign: 'left',
     color: '#fff',
@@ -230,7 +262,7 @@ const styles = StyleSheet.create({
   },
   CardDate: {
     fontFamily: 'Prompt-Regular',
-    fontSize: 10,
+    fontSize: 13,
     letterSpacing: 0,
     textAlign: 'left',
     color: '#fff',

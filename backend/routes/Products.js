@@ -19,6 +19,10 @@ router.get('/keyword/:keyword',(req,res) =>{
     res.send(filtered)
 })
 
+router.get("/:apiName", (req, res) => {
+    res.send(findKeyWord(req.query.keyword));
+})
+
 function findKeyWord(kw){
     var result = [];
     for(var i = 0; i<mock_data.length;i++){
