@@ -13,7 +13,7 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import ProductCard from '../components/ProductCard';
 import useFetch from '../components/useFetch';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AppLoader from './AppLoader';
 import {include} from 'underscore';
@@ -24,75 +24,6 @@ export default function ProductLists({navigation}) {
   const productURL = 'http://10.0.2.2:4000/products/keyword?keyword=' + value;
 
   const {data, loading} = useFetch(productURL);
-
-  const testData = [
-    {
-      product_name: 'สุกรชำแหละ เนื้อแดง สะโพก',
-      price_max: 260.0,
-      unit: 'บาท/กก.',
-      price_list: [
-        {
-          date: '2022-01-14T00:00:00',
-          price_min: 250.0,
-          price_max: 260.0,
-        },
-      ],
-    },
-    {
-      product_name: 'เนื้อโค ธรรมดา',
-      price_max: 260.0,
-      unit: 'บาท/กก.',
-      price_list: [
-        {
-          date: '2022-01-14T00:00:00',
-          price_min: 250.0,
-          price_max: 260.0,
-        },
-      ],
-    },
-    {
-      product_name: 'เนื้อโค ธรรมดา',
-      price_max: 260.0,
-      unit: 'บาท/กก.',
-      price_list: [
-        {
-          date: '2022-01-14T00:00:00',
-          price_min: 250.0,
-          price_max: 260.0,
-        },
-      ],
-    },
-    {
-      product_name: 'เนื้อโค ธรรมดา',
-      price_max: 260.0,
-      unit: 'บาท/กก.',
-      price_list: [
-        {
-          date: '2022-01-14T00:00:00',
-          price_min: 250.0,
-          price_max: 260.0,
-        },
-      ],
-    },
-    {
-      product_name: 'เนื้อโค ธรรมดา',
-      price_max: 260.0,
-      unit: 'บาท/กก.',
-      price_list: [
-        {
-          date: '2022-01-14T00:00:00',
-          price_min: 250.0,
-          price_max: 260.0,
-        },
-      ],
-    },
-  ];
-  const formatDate = date => {
-    let year = date.split('T')[0].split('-')[0];
-    let month = date.split('T')[0].split('-')[1];
-    let day = date.split('T')[0].split('-')[2];
-    return 'ข้อมูลล่าสุด ณ วันที่ ' + day + '/' + month + '/' + year;
-  };
 
   return (
     <>
@@ -109,6 +40,7 @@ export default function ProductLists({navigation}) {
             <Text style={styles.welcome}>เลือกรายการสินค้า</Text>
           </View>
           <View style={styles.searchBox}>
+            <FontAwesome name="search" size={22}></FontAwesome>
             <TextInput
               placeholder="ค้นหาสินค้า"
               placeholderTextColor="gray"
@@ -141,6 +73,7 @@ export default function ProductLists({navigation}) {
           {/* <Text style={styles.HeaderContent}>รายการสินค้า</Text> */}
           <FlatList
             data={data}
+            initialNumToRender={7}
             renderItem={({item}) => {
               // let date = formatDate(item.price_list[0].date);
               let path = '';
@@ -227,10 +160,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     marginBottom: 10,
+    flexDirection: 'row'
   },
   TextInput: {
     fontFamily: 'Prompt-Regular',
     padding: 0,
+    marginLeft: 10
   },
   Headnotes: {
     fontSize: 18,

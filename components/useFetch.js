@@ -17,11 +17,48 @@ const useFetch = url => {
     } catch (err) {}
   };
 
+  const refetch = async () => {
+    try {
+      console.log("Refetch");
+      const response = await fetch(url);
+      const fetchdata = await response.json();
+      setData(fetchdata);
+      setLoading(false);
+    } catch (err) {}
+  };
+
   useEffect(() => {
     getData();
-  }, [url]);
+  }, [url])
+  
 
-  return {data, loading};
+  // useEffect(() => {
+  //   setLoading(true);
+  //   axios
+  //     .get(url)
+  //     .then(response => {
+  //       setData(response.data);
+  //     })
+  //     .catch(err => {})
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // }, [url]);
+
+  // const refetch = () => {
+  //   setLoading(true);
+  //   axios
+  //     .get(url)
+  //     .then(response => {
+  //       setData(response.data);
+  //     })
+  //     .catch(err => {})
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
+
+  return {data, loading, refetch};
 };
 
 export default useFetch;

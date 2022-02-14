@@ -125,6 +125,7 @@ export default function MapTongfah({navigation}) {
               style={styles.TextInput}
               onChangeText={text => onChangeText(text)}
             />
+            <Icon name="search" size={22}></Icon>
           </View>
         </View>
 
@@ -132,6 +133,7 @@ export default function MapTongfah({navigation}) {
           <FlatList
             data={filterdata}
             ItemSeparatorComponent={FlatListItemSeparator}
+            initialNumToRender={7}
             renderItem={({item, index}) => (
               <View>
                 <TouchableOpacity
@@ -201,6 +203,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
+    flexDirection:'row'
   },
   signIn: {
     width: '100%',

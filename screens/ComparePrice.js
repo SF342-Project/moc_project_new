@@ -7,31 +7,53 @@ import {
   TouchableOpacity,
   Button,
   Dimensions,
+  TouchableHighlight,
+  Image,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DatePicker from 'react-native-date-picker';
 import useFetch from '../components/useFetch';
 import AppLoader from './AppLoader';
 
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from 'react-native-chart-kit';
+import {LineChart} from 'react-native-chart-kit';
 import {ScrollView} from 'react-native-gesture-handler';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
 
+  const getDateToday = () => {
+    let day = new Date().getDate().toLocaleString();
+    let month = (new Date().getMonth() + 1).toLocaleString();
+    if (day.length == 1) {
+      day = '0' + day;
+    }
+    if (month.length == 1) {
+      month = '0' + month;
+    }
+    let formatDateText = new Date().getFullYear() + '-' + month + '-' + day;
+
+    return formatDateText;
+  };
+
+  const [textStart, setTextStart] = useState('2022-01-01');
+  const [textEnd, setTextEnd] = useState(getDateToday);
+
   const API_URL =
     'https://dataapi.moc.go.th/gis-product-prices?product_id=' +
     id +
-    '&from_date=2022-01-01&to_date=2023-01-28';
+    '&from_date=' +
+    textStart +
+    '&to_date=' +
+    textEnd;
 
-  const {data, loading} = useFetch(API_URL);
+  const {data, loading, refetch} = useFetch(API_URL);
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [openStart, setOpenStart] = useState(false);
+
+  const [endDate, setEndDate] = useState(new Date());
+  const [openEnd, setOpenEnd] = useState(false);
 
   const [chartData, setChartData] = useState({
     labels: ['January'],
@@ -44,6 +66,32 @@ export default function ComparePrice({route, navigation}) {
 
   const [priceDateArr, setPriceDateArr] = useState([]);
   const [averagePrice, setAveragePrice] = useState([]);
+
+  const formatDate = (date) => {
+    let tempDate = new Date(date);
+    let day = tempDate.getDate().toLocaleString();
+    let month = (tempDate.getMonth() + 1).toLocaleString();
+    if (day.length == 1) {
+      day = '0' + day;
+    }
+    if (month.length == 1) {
+      month = '0' + month;
+    }
+    return tempDate.getFullYear() + '-' + month + '-' + day;
+
+  }
+
+  const ConfirmDateStart = date => {
+    setOpenStart(false);
+    setTextStart(formatDate(date));
+    setStartDate(date);
+  };
+
+  const ConfirmDateEnd = date => {
+    setOpenEnd(false);
+    setTextEnd(formatDate(date));
+    setEndDate(date);
+  };
 
   const chart = () => {
     let pDate = [];
@@ -75,13 +123,12 @@ export default function ComparePrice({route, navigation}) {
   };
 
   useEffect(() => {
-    if (!loading) {
+    if (loading || !loading) {
       chart();
     }
-  }, [!loading]);
+  }, [data]);
 
-
-  const formatDate = date => {
+  const formatDateText = date => {
     try {
       let year = date.split('T')[0].split('-')[0];
       let month = date.split('T')[0].split('-')[1];
@@ -146,7 +193,7 @@ export default function ComparePrice({route, navigation}) {
                     </Text>
                   ) : null}
 
-                  {diffPrice > 0 ? (
+                  {diffPrice >= 0 ? (
                     <Text style={styles.CardPriceUp}>
                       {averagePrice[averagePrice.length - 1]}
                     </Text>
@@ -155,7 +202,7 @@ export default function ComparePrice({route, navigation}) {
                   <Text style={styles.CardUnit}>{data.unit}</Text>
                 </View>
                 <Text style={styles.CardDate}>
-                  {formatDate(priceDateArr[priceDateArr.length - 1])}
+                  {formatDateText(priceDateArr[priceDateArr.length - 1])}
                 </Text>
               </View>
 
@@ -165,7 +212,7 @@ export default function ComparePrice({route, navigation}) {
                 </View>
               ) : null}
 
-              {percent > 0 ? (
+              {percent >= 0 ? (
                 <View style={{flex: 0.3}}>
                   <Text style={styles.PercentUp}>{percent.toFixed(2)}%</Text>
                 </View>
@@ -191,19 +238,53 @@ export default function ComparePrice({route, navigation}) {
           </View>
 
           <View style={styles.Content}>
-            <View
-              style={styles.ChangeDay}>
-              <TouchableOpacity style={styles.ChangeDayButton}>
-                <Text style={styles.ChangeDayText}>7D</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.ChangeDayButton}>
-                <Text style={styles.ChangeDayText}>1M</Text>
-              </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.LabelDate}>ตั้งแต่วันที่</Text>
+              <View style={{alignItems: 'center', paddingBottom: 20}}>
+                <View style={styles.input_f}>
+                  <TouchableOpacity
+                    onPress={() => setOpenStart(true)}
+                    style={{borderRadius: 15}}>
+                    <FontAwesome5 name="calendar" size={17}></FontAwesome5>
+                  </TouchableOpacity>
+                  <DatePicker
+                    modal
+                    open={openStart}
+                    date={startDate}
+                    mode={'date'}
+                    onConfirm={date => ConfirmDateStart(date)}
+                    onCancel={() => {
+                      setOpenStart(false);
+                    }}
+                  />
+                  <Text style={styles.style_text_date}>{textStart}</Text>
+                </View>
+              </View>
             </View>
-          </View>
 
-          <View style={styles.Content}>
-            <Text style={styles.HeaderContent}>ตารางเปรียบเทียบราคาสินค้า</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.LabelDate}>ถึงวันที่</Text>
+              <View style={{alignItems: 'center', paddingBottom: 20, paddingLeft: 20}}>
+                <View style={styles.input_f}>
+                  <TouchableOpacity
+                    onPress={() => setOpenEnd(true)}
+                    style={{borderRadius: 15}}>
+                    <FontAwesome5 name="calendar" size={17}></FontAwesome5>
+                  </TouchableOpacity>
+                  <DatePicker
+                    modal
+                    open={openEnd}
+                    date={endDate}
+                    mode={'date'}
+                    onConfirm={date => ConfirmDateEnd(date)}
+                    onCancel={() => {
+                      setOpenEnd(false);
+                    }}
+                  />
+                  <Text style={styles.style_text_date}>{textEnd}</Text>
+                </View>
+              </View>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -215,16 +296,43 @@ export default function ComparePrice({route, navigation}) {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+    backgroundColor:'#fff'
+  },
+  LabelDate: {
+    fontFamily: 'Prompt-Bold',
+    margin: 10,
+    fontSize: 15,
+    color: '#000',
+  },
+  style_text_date: {
+    fontSize: 12,
+    alignItems: 'center',
+    fontFamily: 'Prompt-Bold',
+    paddingLeft: 5,
+    color: '#000',
+  },
+  input_f: {
+    width: '100%',
+    borderWidth: 1,
+    padding: 10,
+    fontSize: 16,
+    shadowColor: '#000000',
+    shadowOpacity: 5,
+    shadowRadius: 5,
+    elevation: 2,
+    backgroundColor: '#e5f1f1',
+    borderRadius: 50,
+    flexDirection: 'row',
   },
   ChangeDay: {
     flexDirection: 'row',
     alignSelf: 'center',
     backgroundColor: '#2752E6',
-    borderRadius:15
+    borderRadius: 15,
   },
   ChangeDayButton: {
     padding: 5,
-    margin: 5
+    margin: 5,
   },
   ChangeDayText: {
     color: '#fff',
