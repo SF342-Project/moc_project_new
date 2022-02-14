@@ -1,34 +1,32 @@
 const express = require('express');
-// const Product = require('../models/Product')
+const Product = require('../models/Products')
 const router = express.Router()
 
-var _ = require("underscore");
-const mock_data = require('../mock_data/product.json')
 
-router.get('/all',(req,res)=>{
-    res.send(mock_data)
-})
-
-router.get('/id/:id',(req,res) =>{
-    var filtered = _.where(mock_data,{'id':req.params.id})
+router.get('/all',async (req,res)=>{
+    var filtered = await Product.find({})
     res.send(filtered)
 })
 
-router.get('/keyword/:keyword',(req,res) =>{
-    var filtered = findKeyWord(req.params.keyword);
+
+router.get('/id/:id',async (req,res) =>{
+    var filtered = await Product.find({'id':req.params.id})
     res.send(filtered)
 })
 
-router.get("/:apiName", (req, res) => {
-    res.send(findKeyWord(req.query.keyword));
-})
+router.get('/keyword/:keyword',async (req,res) =>{
+    var mock_data = await Product.find({});
 
-function findKeyWord(kw){
     var result = [];
     for(var i = 0; i<mock_data.length;i++){
-        if(mock_data[i].name.indexOf(kw) > -1) result.push(mock_data[i]);
+        if(mock_data[i].name.indexOf(req.params.keyword) > -1) result.push(mock_data[i]);
     }
-    return result;
-}
+    res.send(result)
+})
+
+// router.get("/:apiName", (req, res) => {
+//     res.send(findKeyWord(req.query.keyword));
+// })
+
 
 module.exports = router
