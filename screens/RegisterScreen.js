@@ -58,6 +58,13 @@ const RegisterScreen = () => {
             placeholderText=""
             secureTextEntry={true}
           />
+          <Text style={styles.inputText}>CONFIRM PASSWORD</Text>
+          <Input
+            style={styles.input}
+            labelValue={password}
+            placeholderText=""
+            secureTextEntry={true}
+          />
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => {
@@ -82,6 +89,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Prompt-Bold',
     fontSize: 25,
     marginBottom: 20,
+    marginTop: 20
   },
   input: {
     marginVertical: 7,

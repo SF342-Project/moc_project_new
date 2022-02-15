@@ -11,43 +11,44 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
+import Slider from '../components/Carousel';
 import { AuthContext } from '../navigation/AuthProviders';
+
 const Home = ({ navigation }) => {
   const { user, logout } = useContext(AuthContext);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.profile}>
-        <Text style={styles.welcome}> หน้าแรก</Text>
-      </View>
-      <View style={{ alignItems: 'center' }}>
-        <Text style={styles.Text}>ราคาสินค้า</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ margin: 10, height: 60, width: 80, backgroundColor: "#2752E6", flex: 0.3 }} />
-          <View style={{ margin: 10, height: 60, width: 80, backgroundColor: "#2752E6", flex: 0.3 }} />
-          <View style={{ margin: 10, height: 60, width: 80, backgroundColor: "#2752E6", flex: 0.3 }} />
+      <ScrollView>
+        <View style={styles.profile}>
+          <Text style={styles.welcome}> หน้าแรก</Text>
         </View>
-        <Text style={styles.Text}>บริการด้านการค้าภายในประเทศ</Text>
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('MapTongfah')}>
-            <Image style={{ width: '78%', height: '50%', marginTop: 10, }} source={{ uri: 'https://play-lh.googleusercontent.com/WInYydpgoP1-qeoHZ4Ia9ybqU8sq_Mgn8XT0nJWNcuSxNBWb8xgauSFbzB55P1z7sA' }} />
-            <Text style={styles.ButtonText}>
-              สถานที่ร้านธงฟ้า
-            </Text>
-            <Image style={{ width: '55%', height: '12%', }} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('ProductLists')}>
-            {/* <Image style={{ width: '55%', height: '50%', marginTop: 10, }} source={require('Price.png')} /> */}
-            <Text style={styles.ButtonText}>
-              เปรียบเทียบราคาสินค้า
-            </Text>
-            <Image style={{ width: '55%', height: '12%', }} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
+        <View style={{ alignItems: 'center' }}>
+          <View style={styles.Slider}>
+            <Slider />
+          </View>
+          <Text style={styles.Text}>บริการด้านการค้าภายในประเทศ</Text>
+          <View style={{ flexDirection: "column" }}>
+            <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('ProductLists')}>
+              <Image style={styles.Image} source={{ uri: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' }} />
+              <Text style={styles.ButtonText}>
+                เปรียบเทียบราคาสินค้า
+              </Text>
+              <Image style={styles.DITImage} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('MapTongfah')}>
+              <Image style={styles.Image} source={{ uri: 'https://beyereye.com/wp-content/uploads/2017/08/google-map-background-1900x1170.png' }} />
+              <Text style={styles.ButtonText}>
+                สถานที่ร้านธงฟ้า
+              </Text>
+              <Image style={styles.DITImage} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+            <Text style={styles.logoutText}>ออกจากระบบ</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
-          <Text style={styles.logoutText}>LOG OUT</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -71,18 +72,23 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
     marginBottom: 15,
-    fontWeight: 'bold',
+    fontFamily: "Prompt-Bold",
     fontSize: 25,
     color: '#FFFFFF',
   },
-
+  Slider: {
+    alignItems:'center',
+    justifyContent:'center',
+    height: 200,
+  },
   Button: {
-    alignItems: "center",
+    overflow: 'hidden',
     marginHorizontal: '2%',
     backgroundColor: '#FFFFFF',
-    width: 180,
-    height: 200,
-    borderRadius: 10,
+    margin: 10,
+    width: 350,
+    height: 150,
+    borderRadius: 20,
     shadowColor: "#000000",
     shadowOpacity: 5,
     shadowRadius: 5,
@@ -90,18 +96,15 @@ const styles = StyleSheet.create({
   },
 
   ButtonText: {
-    textAlign: 'center',
-    color: '#000000',
-    fontWeight: 'bold',
-    fontSize: 15,
-    padding: 10
+    color: '#2752E6',
+    fontSize: 18,
+    padding: 10,
+    fontFamily: "Prompt-Regular",
+    marginLeft: 10
   },
-
   Text: {
-    textAlign: 'center',
     color: '#000000',
     fontSize: 20,
-    padding: 15,
     fontFamily: "Prompt-Bold"
   },
 
@@ -112,18 +115,27 @@ const styles = StyleSheet.create({
   logoutButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 25,
-    backgroundColor: '#000',
-    borderRadius: 10,
+    marginTop: 20,
+    width: 150,
+    backgroundColor: '#C73304',
+    borderRadius: 40,
+    padding: 20,
+    marginBottom: 20,
   },
   logoutText: {
-    padding: 10,
-    fontSize: 24,
+    fontSize: 15,
     color: '#F0FFFF',
+    fontFamily:'Prompt-Bold'
 
   },
-
+  Image: {
+    width: '100%',
+    height: '50%',
+  },
+  DITImage: {
+    marginLeft: 20,
+    width: '20%',
+    height: '10%',
+  },
 });
 export default Home;
-
-

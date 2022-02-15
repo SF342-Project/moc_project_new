@@ -19,6 +19,16 @@ import AppLoader from './AppLoader';
 import {LineChart} from 'react-native-chart-kit';
 import {ScrollView} from 'react-native-gesture-handler';
 
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+  Cols,
+  Cell,
+} from 'react-native-table-component';
+
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
 
@@ -67,7 +77,7 @@ export default function ComparePrice({route, navigation}) {
   const [priceDateArr, setPriceDateArr] = useState([]);
   const [averagePrice, setAveragePrice] = useState([]);
 
-  const formatDate = (date) => {
+  const formatDate = date => {
     let tempDate = new Date(date);
     let day = tempDate.getDate().toLocaleString();
     let month = (tempDate.getMonth() + 1).toLocaleString();
@@ -78,8 +88,7 @@ export default function ComparePrice({route, navigation}) {
       month = '0' + month;
     }
     return tempDate.getFullYear() + '-' + month + '-' + day;
-
-  }
+  };
 
   const ConfirmDateStart = date => {
     setOpenStart(false);
@@ -220,7 +229,7 @@ export default function ComparePrice({route, navigation}) {
             </View>
           </View>
 
-          <View style={{alignSelf: 'center'}}>
+          <View style={{alignSelf: 'center',marginTop:20,marginBottom: 20}}>
             {!loading ? (
               <LineChart
                 data={chartData}
@@ -233,6 +242,8 @@ export default function ComparePrice({route, navigation}) {
                 bezier
                 withVerticalLabels={false}
                 style={{borderRadius: 20, padding: 5}}
+                withInnerLines={false}
+                withOuterLines={false}
               />
             ) : null}
           </View>
@@ -264,7 +275,12 @@ export default function ComparePrice({route, navigation}) {
 
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.LabelDate}>ถึงวันที่</Text>
-              <View style={{alignItems: 'center', paddingBottom: 20, paddingLeft: 20}}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  paddingBottom: 20,
+                  paddingLeft: 20,
+                }}>
                 <View style={styles.input_f}>
                   <TouchableOpacity
                     onPress={() => setOpenEnd(true)}
@@ -285,6 +301,25 @@ export default function ComparePrice({route, navigation}) {
                 </View>
               </View>
             </View>
+
+
+              {/* {!loading && averagePrice.length > 0 ? (
+                <View style={styles.containerTable}>
+                  <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                    <Row
+                      data={averagePrice}
+                      style={styles.head}
+                      textStyle={styles.text}
+                    />
+                    <Row
+                      data={priceDateArr}
+                      style={styles.head}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </View>
+              ) : null} */}
+ 
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -294,9 +329,17 @@ export default function ComparePrice({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  containerTable: {
+    flex: 1,
+    padding: 16,
+    paddingTop: 30,
+    backgroundColor: '#fff',
+  },
+  head: {height: 50, backgroundColor: '#f1f8ff'},
+  text: {fontSize: 10},
   Container: {
     flex: 1,
-    backgroundColor:'#fff'
+    backgroundColor: '#fff',
   },
   LabelDate: {
     fontFamily: 'Prompt-Bold',

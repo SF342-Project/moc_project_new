@@ -24,9 +24,7 @@ const AuthStack = () => {
       <Stack.Screen
         component={RegisterScreen}
         name="RegisterScreen"
-        options={{
-          title: '',
-        }}
+        options={{header: () => null}}
       />
     </Stack.Navigator>
   );

@@ -24,9 +24,15 @@ router.get('/keyword/:keyword',async (req,res) =>{
     res.send(result)
 })
 
-// router.get("/:apiName", (req, res) => {
-//     res.send(findKeyWord(req.query.keyword));
-// })
+router.get("/:apiName",async (req, res) => {
+    var mock_data = await Product.find({});
+
+    var result = [];
+    for(var i = 0; i<mock_data.length;i++){
+        if(mock_data[i].name.indexOf(req.query.keyword) > -1) result.push(mock_data[i]);
+    }
+    res.send(result)
+})
 
 
 module.exports = router
