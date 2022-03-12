@@ -24,10 +24,10 @@ export default function Routes() {
     };
   }, []);
 
-  if (initializing) return null;
+  // if (initializing) return null;
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
+      {<AppStack />}
     </NavigationContainer>
   );
 }

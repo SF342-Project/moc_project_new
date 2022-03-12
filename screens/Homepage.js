@@ -44,9 +44,9 @@ const Home = ({ navigation }) => {
               <Image style={styles.DITImage} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+          {/* <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
             <Text style={styles.logoutText}>ออกจากระบบ</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </SafeAreaView>
