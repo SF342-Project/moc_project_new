@@ -1,12 +1,14 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const bodyParser = require('body-parser')
+const dotenv = require('dotenv');
 
 const app = express()
-const mongo_url = 'mongodb+srv://team_user:20012544@mocproject.jdugn.mongodb.net/moc_project?retryWrites=true'
 const port = 4000
 
-mongoose.connect(mongo_url,{
+dotenv.config();
+
+mongoose.connect(process.env.DB_CONNECT,{
     useNewUrlParser: true,
 })
 
