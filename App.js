@@ -20,9 +20,6 @@ import {
 
 import Providers  from './navigation/Index';
 import { LogBox } from 'react-native';
-import {Provider} from 'react-redux';
-import {store} from './redux/store'
-
 LogBox.ignoreAllLogs();
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!",
