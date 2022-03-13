@@ -22,9 +22,11 @@ app.use(bodyParser.json());
 const ProductRoute = require('./routes/Products')
 const PriceRoute = require('./routes/Prices')
 const AuthRoute = require('./routes/auth')
+const UserRoute = require('./routes/Users')
 
 app.use('/products',ProductRoute)
 app.use('/price',PriceRoute)
-app.use('/user',AuthRoute)
+app.use('/auth',AuthRoute)
+app.use('/user',UserRoute)
 
 app.listen(port,console.log("Listening on port: 127.0.0.1:",port))

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useContext, useState, useEffect } from 'react';
-import { Input } from '../components/Input';
-import { AuthContext } from '../navigation/AuthProviders';
+import {useContext, useState, useEffect} from 'react';
+import {Input} from '../components/Input';
+import {AuthContext} from '../navigation/AuthProviders';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,16 +10,37 @@ import {
   View,
   Image,
 } from 'react-native';
-import { fonts } from 'react-native-elements/dist/config';
+import MocApi from '../redux/api/MocApi';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import {authlogin, getUsers} from '../redux/users/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const { login } = useContext(AuthContext);
+  const {login} = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const handleLogin = async () => {
+    dispatch(authlogin({email: email, password: password})).then(async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        console.log(token);
+        if (token) {
+          navigation.navigate('Home');
+        } else {
+          console.log('error');
+        }
+      } catch (error) {console.log(error)}
+    });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.View}>
-        <Image source={require('../assets/images/logo.png')} style={styles.image} />
+        <Image
+          source={require('../assets/images/logo.png')}
+          style={styles.image}
+        />
         <Text style={styles.text}>กระทรวงพาณิชย์</Text>
         <Text style={styles.subtext}>Ministry of Commerce</Text>
         <Text style={styles.title}>เข้าสู่ระบบ</Text>
@@ -27,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
         <Input
           style={styles.input}
           labelValue={email}
-          onChangeText={(userEmail) => setEmail(userEmail)}
+          onChangeText={userEmail => setEmail(userEmail)}
           placeholder=""
           keyboardType={'email-address'}
           autoCapitalize="none"
@@ -37,33 +58,30 @@ const LoginScreen = ({ navigation }) => {
         <Input
           style={styles.input}
           labelValue={password}
-          onChangeText={(userPassword) => setPassword(userPassword)}
+          onChangeText={userPassword => setPassword(userPassword)}
           placeholderText=""
           secureTextEntry={true}
         />
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => login(email, password)}>
-          <Text style={styles.loginButtonText}>
-            เข้าสู่ระบบ
-          </Text>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>เข้าสู่ระบบ</Text>
         </TouchableOpacity>
-
       </View>
 
-
-
       <TouchableOpacity>
-        <Text style={{
-          color: '#0BA3FC',
-          fontFamily: 'Prompt-Bold',
-          fontSize: 15,
-        }} onPress={() => navigation.navigate('RegisterScreen')}>
+        <Text
+          style={{
+            color: '#0BA3FC',
+            fontFamily: 'Prompt-Bold',
+            fontSize: 15,
+          }}
+          onPress={() => navigation.navigate('RegisterScreen')}>
           สมัครสมาชิก
         </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
-}
+};
 const styles = StyleSheet.create({
   inputText: {
     color: '#FFFFFF',
@@ -83,14 +101,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 5,
     marginBottom: 7,
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOpacity: 5,
     shadowRadius: 5,
     elevation: 5,
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     paddingLeft: 15,
-
   },
   loginButton: {
     marginVertical: 30,
@@ -98,7 +115,7 @@ const styles = StyleSheet.create({
     width: 125,
     height: 40,
     borderRadius: 20,
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOpacity: 5,
     shadowRadius: 5,
     elevation: 5,
@@ -121,13 +138,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 25,
     paddingTop: 15,
     fontFamily: 'Prompt-Regular',
   },
   subtext: {
-    color: "#047FC7",
+    color: '#047FC7',
     paddingTop: 5,
     marginBottom: 20,
     fontFamily: 'Prompt-Regular',
@@ -137,8 +154,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     resizeMode: 'contain',
-  }
+  },
 });
-
 
 export default LoginScreen;

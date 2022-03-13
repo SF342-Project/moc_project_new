@@ -14,12 +14,18 @@ import {
 import { useSelector } from 'react-redux';
 import Slider from '../components/Carousel';
 import {AuthContext} from '../navigation/AuthProviders';
-import { getAllUsers } from '../redux/users/UserSlice';
+import { getUsers } from '../redux/users/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation}) => {
   const {user, logout} = useContext(AuthContext);
-  const users = useSelector(getAllUsers)
-  console.log(users)
+  const removeToken = async () => {
+    try {
+      await AsyncStorage.removeItem('token')
+      console.log(await AsyncStorage.getItem('token'))
+    } catch (error) {
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -67,9 +73,9 @@ const Home = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
-            <Text style={styles.logoutText}>ออกจากระบบ</Text>
-          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.logoutButton} onPress={removeToken}>
+            <Text style={styles.logoutText}>Remove Token</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

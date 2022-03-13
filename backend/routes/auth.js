@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   //Check if email exists
-  const user = await User.findOne({email: req.body.email});
+  const user = await User.findOne({email: req.body.email}).select('+password');
   if (!user) return res.status(400).send('Email does not exists!!');
 
   //Password is correct
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 
   //Create and assign a token
   const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-  res.header('auth-token', token).send(token);
+  res.header('auth-token', token).send({token: token});
 
 });
 

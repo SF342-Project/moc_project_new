@@ -17,12 +17,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true,
         max: 1024,
-        min: 6
+        min: 6,
+        select: false
     },
     date: {
-        type:Date,
+        type: Date,
         default: Date.now
-    }
+    },
 })
 
 module.exports = mongoose.model('User', UserSchema)

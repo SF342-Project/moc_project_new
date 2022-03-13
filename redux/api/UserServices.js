@@ -1,9 +1,9 @@
-import MocApi from "./MocApi";
+import MocApi from './MocApi';
 
-const login = (data) => {
-    return MocApi.post("/user/login", data);
-  };
+const login = data => {
+  return MocApi.post('/auth/login', data);
+};
 
-const UserService = {login}
+const UserService = {login};
 
 export default UserService;
