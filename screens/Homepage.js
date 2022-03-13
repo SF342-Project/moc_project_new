@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useEffect } from 'react';
+import {useContext, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,39 +9,62 @@ import {
   useColorScheme,
   View,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import Slider from '../components/Carousel';
-import { AuthContext } from '../navigation/AuthProviders';
+import {AuthContext} from '../navigation/AuthProviders';
+import { getAllUsers } from '../redux/users/UserSlice';
 
-const Home = ({ navigation }) => {
-  const { user, logout } = useContext(AuthContext);
-
+const Home = ({navigation}) => {
+  const {user, logout} = useContext(AuthContext);
+  const users = useSelector(getAllUsers)
+  console.log(users)
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.profile}>
-          <Text style={styles.welcome}> หน้าแรก</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.welcome}> หน้าแรก</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.welcomeLogin}>เข้าสู่ระบบ</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <View style={styles.Slider}>
             <Slider />
           </View>
           <Text style={styles.Text}>บริการด้านการค้าภายในประเทศ</Text>
-          <View style={{ flexDirection: "column" }}>
-            <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('ProductLists')}>
-              <Image style={styles.Image} source={{ uri: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' }} />
-              <Text style={styles.ButtonText}>
-                เปรียบเทียบราคาสินค้า
-              </Text>
-              <Image style={styles.DITImage} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
+          <View style={{flexDirection: 'column'}}>
+            <TouchableOpacity
+              style={styles.Button}
+              onPress={() => navigation.navigate('ProductLists')}>
+              <Image
+                style={styles.Image}
+                source={{
+                  uri: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                }}
+              />
+              <Text style={styles.ButtonText}>เปรียบเทียบราคาสินค้า</Text>
+              <Image
+                style={styles.DITImage}
+                source={require('../assets/images/dit.png')}
+              />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('MapTongfah')}>
-              <Image style={styles.Image} source={{ uri: 'https://beyereye.com/wp-content/uploads/2017/08/google-map-background-1900x1170.png' }} />
-              <Text style={styles.ButtonText}>
-                สถานที่ร้านธงฟ้า
-              </Text>
-              <Image style={styles.DITImage} source={{ uri: 'https://inwfile.com/s-fg/pdz6i9.png' }} />
+            <TouchableOpacity
+              style={styles.Button}
+              onPress={() => navigation.navigate('MapTongfah')}>
+              <Image
+                style={styles.Image}
+                source={require('../assets/images/ggmap.png')}
+              />
+              <Text style={styles.ButtonText}>สถานที่ร้านธงฟ้า</Text>
+              <Image
+                style={styles.DITImage}
+                source={require('../assets/images/dit.png')}
+              />
             </TouchableOpacity>
           </View>
           {/* <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
@@ -53,13 +76,11 @@ const Home = ({ navigation }) => {
   );
 };
 
-
 const styles = StyleSheet.create({
-
   profile: {
     marginBottom: 10,
     backgroundColor: '#0A214A',
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOpacity: 5,
     shadowRadius: 5,
     elevation: 5,
@@ -67,18 +88,29 @@ const styles = StyleSheet.create({
 
   welcome: {
     textShadowColor: '#000000',
-    textShadowOffset: { width: 0, height: 1 },
+    textShadowOffset: {width: 0, height: 1},
     textShadowRadius: 10,
     marginTop: 15,
     marginLeft: 15,
     marginBottom: 15,
-    fontFamily: "Prompt-Bold",
+    fontFamily: 'Prompt-Bold',
     fontSize: 25,
     color: '#FFFFFF',
   },
+  welcomeLogin: {
+    textShadowColor: '#000000',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 10,
+    marginTop: 20,
+    marginRight: 15,
+    marginBottom: 15,
+    fontFamily: 'Prompt-Bold',
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
   Slider: {
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 200,
   },
   Button: {
@@ -89,7 +121,7 @@ const styles = StyleSheet.create({
     width: 350,
     height: 150,
     borderRadius: 20,
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOpacity: 5,
     shadowRadius: 5,
     elevation: 5,
@@ -99,13 +131,13 @@ const styles = StyleSheet.create({
     color: '#2752E6',
     fontSize: 18,
     padding: 10,
-    fontFamily: "Prompt-Regular",
-    marginLeft: 10
+    fontFamily: 'Prompt-Regular',
+    marginLeft: 10,
   },
   Text: {
     color: '#000000',
     fontSize: 20,
-    fontFamily: "Prompt-Bold"
+    fontFamily: 'Prompt-Bold',
   },
 
   container: {
@@ -125,8 +157,7 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 15,
     color: '#F0FFFF',
-    fontFamily:'Prompt-Bold'
-
+    fontFamily: 'Prompt-Bold',
   },
   Image: {
     width: '100%',
