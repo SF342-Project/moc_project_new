@@ -4,6 +4,11 @@ const login = data => {
   return MocApi.post('/auth/login', data);
 };
 
-const UserService = {login};
+const getUser = id => {
+  
+  return MocApi.get(`/user/${id}`);
+};
+
+const UserService = {login, getUser};
 
 export default UserService;

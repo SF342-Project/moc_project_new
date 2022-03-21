@@ -1,5 +1,5 @@
 import React from 'react';
-import {useContext, useEffect} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,31 +11,59 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Slider from '../components/Carousel';
 import {AuthContext} from '../navigation/AuthProviders';
-import { getUsers } from '../redux/users/UserSlice';
+import {
+  checkUserState,
+  fetchUserData,
+  getUsers,
+} from '../redux/users/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import jwtDecode from 'jwt-decode';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const Home = ({navigation}) => {
-  const {user, logout} = useContext(AuthContext);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = useSelector(getUsers);
+  const dispatch = useDispatch();
+
   const removeToken = async () => {
     try {
-      await AsyncStorage.removeItem('token')
-      console.log(await AsyncStorage.getItem('token'))
-    } catch (error) {
+      await AsyncStorage.removeItem('token');
+      console.log(await AsyncStorage.getItem('token'));
+    } catch (error) {}
+  };
+
+  const fetchData = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token !== null) {
+      console.log('Token', token);
+      setIsLoggedIn(true);
+      var decoded = jwtDecode(token);
+      console.log(decoded._id);
+      dispatch(fetchUserData(decoded._id)) 
     }
-  }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [user.success]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.profile}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.welcome}> หน้าแรก</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.welcomeLogin}>เข้าสู่ระบบ</Text>
-            </TouchableOpacity>
+            {isLoggedIn ? (
+              <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+                <Text style={styles.welcomeLogin}><FontAwesome name="user" size={22}></FontAwesome></Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.welcomeLogin}>เข้าสู่ระบบ</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View style={{alignItems: 'center'}}>
