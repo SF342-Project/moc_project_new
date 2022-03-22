@@ -47,7 +47,7 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     fetchData();
-  }, [user.success]);
+  }, [user.token]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,7 +57,7 @@ const Home = ({navigation}) => {
             <Text style={styles.welcome}> หน้าแรก</Text>
             {isLoggedIn ? (
               <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
-                <Text style={styles.welcomeLogin}><FontAwesome name="user" size={22}></FontAwesome></Text>
+                <Text style={styles.welcomeLogin}><FontAwesome name="user" size={25}></FontAwesome></Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>

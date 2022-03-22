@@ -1,76 +1,84 @@
 import * as React from 'react';
-import { useState, useContext } from 'react';
-import { SafeAreaView,View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { Input } from '../components/Input';
-import { AuthContext } from '../navigation/AuthProviders';
+import {useState, useContext} from 'react';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
+import {Input} from '../components/Input';
+import {AuthContext} from '../navigation/AuthProviders';
 import firestore from '@react-native-firebase/firestore';
-const RegisterScreen = () => {
+import {useDispatch, useSelector} from 'react-redux';
+import {authRegister} from '../redux/users/UserSlice';
+const RegisterScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [name, setName] = useState();
 
-
-  const { register } = useContext(AuthContext);
+  const {register} = useContext(AuthContext);
 
   const usersCollectionRef = firestore().collection('users');
 
-  const addusers = () => {
-    usersCollectionRef.add({
-      Name: name,
-      Email: email,
-    });
+  const dispatch = useDispatch();
+
+  const handleRegister = async () => {
+    dispatch(authRegister({email: email, password: password, name: name})).unwrap()
+    .then(() => navigation.navigate('Login'))
+    .catch((error) => Alert.alert(error))
   };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.View}>
-      <View style={{ alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Image source={require('../assets/images/logo.png')} style={styles.image} />
-          <View style={{ flexDirection: 'column' }}>
-            <Text style={styles.text}>กระทรวงพาณิชย์</Text>
-            <Text style={styles.subtext}>Ministry of Commerce</Text>
+        <View style={{alignItems: 'center'}}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={require('../assets/images/logo.png')}
+              style={styles.image}
+            />
+            <View style={{flexDirection: 'column'}}>
+              <Text style={styles.text}>กระทรวงพาณิชย์</Text>
+              <Text style={styles.subtext}>Ministry of Commerce</Text>
+            </View>
           </View>
         </View>
-      </View>
         <Text style={styles.title}>ลงทะเบียนสมาชิก</Text>
-          <Text style={styles.inputText}>USERNAME</Text>
-          <Input
-            style={styles.input}
-            labelValue={name}
-            onChangeText={userName => setName(userName)}
-            placeholder=""
-            autoCorrect={false}
-          />
-          <Text style={styles.inputText}>EMAIL</Text>
-          <Input
-            style={styles.input}
-            labelValue={email}
-            onChangeText={userEmail => setEmail(userEmail)}
-            placeholder=""
-            keyboardType={'email-address'}
-            autoCorrect={false}
-          />
-          <Text style={styles.inputText}>PASSWORD</Text>
-          <Input
-            style={styles.input}
-            labelValue={password}
-            onChangeText={userPassword => setPassword(userPassword)}
-            placeholderText=""
-            secureTextEntry={true}
-          />
-          <Text style={styles.inputText}>CONFIRM PASSWORD</Text>
-          <Input
-            style={styles.input}
-            labelValue={password}
-            placeholderText=""
-            secureTextEntry={true}
-          />
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => {
-            register(email, password, name);
-            addusers();
-          }}>
+        <Text style={styles.inputText}>USERNAME</Text>
+        <Input
+          style={styles.input}
+          labelValue={name}
+          onChangeText={userName => setName(userName)}
+          placeholder=""
+          autoCorrect={false}
+        />
+        <Text style={styles.inputText}>EMAIL</Text>
+        <Input
+          style={styles.input}
+          labelValue={email}
+          onChangeText={userEmail => setEmail(userEmail)}
+          placeholder=""
+          keyboardType={'email-address'}
+          autoCorrect={false}
+        />
+        <Text style={styles.inputText}>PASSWORD</Text>
+        <Input
+          style={styles.input}
+          labelValue={password}
+          onChangeText={userPassword => setPassword(userPassword)}
+          placeholderText=""
+          secureTextEntry={true}
+        />
+        {/* <Text style={styles.inputText}>CONFIRM PASSWORD</Text>
+        <Input
+          style={styles.input}
+          labelValue={password}
+          placeholderText=""
+          secureTextEntry={true}
+        /> */}
+        <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
           <Text style={styles.loginButtonText}>สมัครสมาชิก</Text>
         </TouchableOpacity>
       </View>
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Prompt-Bold',
     fontSize: 25,
     marginBottom: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   input: {
     marginVertical: 7,
@@ -97,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 5,
     marginBottom: 7,
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOpacity: 5,
     shadowRadius: 5,
     elevation: 5,
@@ -112,7 +120,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 40,
     borderRadius: 20,
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOpacity: 5,
     shadowRadius: 5,
     elevation: 5,
@@ -130,18 +138,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   View: {
-    marginTop:30,
+    marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   text: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 25,
     paddingTop: 15,
     fontFamily: 'Prompt-Regular',
   },
   subtext: {
-    color: "#047FC7",
+    color: '#047FC7',
     paddingTop: 5,
     marginBottom: 20,
     fontFamily: 'Prompt-Regular',
@@ -152,6 +160,6 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     resizeMode: 'contain',
-  }
+  },
 });
 export default RegisterScreen;
