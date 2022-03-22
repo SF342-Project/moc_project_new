@@ -14,17 +14,29 @@ export const authlogin = createAsyncThunk('users/login', async data => {
   return res.data;
 });
 
-export const authRegister = createAsyncThunk('user/register', async (data, {rejectWithValue}) => {
+export const authLogout = createAsyncThunk('user/logout', async () => {
   try {
-    const res = await UserService.register(data)
-    return res.data;
+    await AsyncStorage.removeItem('token');
+    console.log("Token After Logout: ",await AsyncStorage.getItem('token'));
   } catch (error) {
-    if (!error.response) {
-      throw error
-    }
-    return rejectWithValue(error.response.data)
+    console.log(error);
   }
 });
+
+export const authRegister = createAsyncThunk(
+  'user/register',
+  async (data, {rejectWithValue}) => {
+    try {
+      const res = await UserService.register(data);
+      return res.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 export const fetchUserData = createAsyncThunk('user/getUser', async id => {
   const res = await UserService.getUser(id);
@@ -33,6 +45,7 @@ export const fetchUserData = createAsyncThunk('user/getUser', async id => {
 
 const initialState = {
   users: {},
+  token: '',
 };
 
 const UserSlice = createSlice({
@@ -41,6 +54,7 @@ const UserSlice = createSlice({
   extraReducers: {
     [authlogin.fulfilled]: (state, {payload}) => {
       console.log('Login Success!!');
+      console.log(payload);
       return {...state, users: payload};
     },
     [authRegister.fulfilled]: (state, {payload}) => {
@@ -50,9 +64,11 @@ const UserSlice = createSlice({
     [authRegister.rejected]: (state, {error}) => {
       console.log('Register Rejected!!');
       console.log(error);
-      
     },
-
+    [authLogout.fulfilled]: state => {
+      console.log('Logout Success!!');
+      return {...state, users: {token: ""}};
+    },
     [fetchUserData.fulfilled]: (state, {payload}) => {
       console.log('Fetch Sucess!!');
       return {...state, users: payload};

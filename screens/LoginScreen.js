@@ -22,7 +22,8 @@ const LoginScreen = ({navigation}) => {
   const {login} = useContext(AuthContext);
   const dispatch = useDispatch();
   const handleLogin = async () => {
-    dispatch(authlogin({email: email, password: password})).then(async () => {
+    dispatch(authlogin({email: email, password: password})).unwrap()
+    .then(async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {

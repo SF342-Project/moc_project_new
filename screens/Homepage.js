@@ -42,6 +42,8 @@ const Home = ({navigation}) => {
       var decoded = jwtDecode(token);
       console.log(decoded._id);
       dispatch(fetchUserData(decoded._id)) 
+    } else {
+      setIsLoggedIn(false);
     }
   };
 
