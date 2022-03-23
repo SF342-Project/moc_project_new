@@ -2,6 +2,7 @@ const express = require('express')
 const Price = require('../models/Prices')
 const router = express.Router()
 const fetch = require('node-fetch');
+const Last = require('../models/Lasts')
 
 function reqDateFormat(dt){
     const d = new Date(dt)
@@ -42,9 +43,20 @@ router.get('/now/:id',async (req,res) =>{
     var before_formatted = reqDateFormat(before)
     
     var now_formatted_db = dbDateFormat(now_formatted)
-    var filtered = await Price.find({'id':req.params.id,'date':now_formatted_db})
 
-    if (filtered.length === 0){
+    var _latest = await Last.findOne({'id':req.params.id},{},{'date':-1})
+    if (_latest === null){
+        var newLast = new Last({
+            'id':req.params.id,
+            'date':dbDateFormat(now_formatted)
+        })
+        await newLast.save()
+
+    }
+    var latest = await Last.findOne({'id':req.params.id},{},{'date':-1})
+    var lastd = new Date(latest.date)
+    var dif_date = Math.round((now.getTime() - lastd.getTime()) / (1000 * 60 * 60 * 24))
+    if (dif_date > 0 || _latest === null){
         var product_detail = await getProductPrices(req.params.id,before_formatted,now_formatted)
         for(var i = 0; i< product_detail.length; i++){
             var prodt = product_detail[i]
@@ -60,21 +72,18 @@ router.get('/now/:id',async (req,res) =>{
                     "price_max":price_max
                 })
                 await newPrices.save()
-                console.log(newPrices);
             }
-            // else{
-            //     console.log('Data is exits');
-            // }
         }
         
         var latestData = await Price.findOne({'id':req.params.id}, {}, { sort: { 'date' : -1 } });
         res.send(latestData)
-
+        
     }
     else{
-        res.send(filtered)
+        var latestData = await Price.findOne({'id':req.params.id}, {}, { sort: { 'date' : -1 } });
+        res.send(latestData)
     }
-
+    
 })
 
 router.get('/compare/:id/:from/:to',async (req,res) =>{
