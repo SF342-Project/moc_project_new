@@ -1,21 +1,17 @@
 import React from 'react';
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   TouchableOpacity,
   Image,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Slider from '../components/Carousel';
-import {AuthContext} from '../navigation/AuthProviders';
 import {
-  checkUserState,
   fetchUserData,
   getUsers,
 } from '../redux/users/UserSlice';
@@ -26,13 +22,6 @@ const Home = ({navigation}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector(getUsers);
   const dispatch = useDispatch();
-
-  const removeToken = async () => {
-    try {
-      await AsyncStorage.removeItem('token');
-      console.log(await AsyncStorage.getItem('token'));
-    } catch (error) {}
-  };
 
   const fetchData = async () => {
     const token = await AsyncStorage.getItem('token');
@@ -103,9 +92,6 @@ const Home = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={removeToken}>
-            <Text style={styles.logoutText}>Remove Token</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

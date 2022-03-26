@@ -28,10 +28,22 @@ import {
   Cols,
   Cell,
 } from 'react-native-table-component';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentPrice, getPriceNow } from '../redux/users/PriceSlice';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
 
+  const currentPriceProduct = useSelector(getCurrentPrice);
+  const currentPrice = (currentPriceProduct.price_min + currentPriceProduct.price_max) / 2
+  console.log("Current",currentPrice)
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPriceNow(id))
+  }, [dispatch])
+  
   const getDateToday = () => {
     let day = new Date().getDate().toLocaleString();
     let month = (new Date().getMonth() + 1).toLocaleString();
@@ -198,13 +210,13 @@ export default function ComparePrice({route, navigation}) {
                 <View style={{flexDirection: 'row'}}>
                   {diffPrice < 0 ? (
                     <Text style={styles.CardPriceDown}>
-                      {averagePrice[averagePrice.length - 1]}
+                      {currentPrice}
                     </Text>
                   ) : null}
 
                   {diffPrice >= 0 ? (
                     <Text style={styles.CardPriceUp}>
-                      {averagePrice[averagePrice.length - 1]}
+                      {currentPrice}
                     </Text>
                   ) : null}
 
