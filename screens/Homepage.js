@@ -68,9 +68,7 @@ const Home = ({navigation}) => {
               onPress={() => navigation.navigate('ProductLists')}>
               <Image
                 style={styles.Image}
-                source={{
-                  uri: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-                }}
+                source={require('../assets/images/graph_home.jpg')}
               />
               <Text style={styles.ButtonText}>เปรียบเทียบราคาสินค้า</Text>
               <Image
