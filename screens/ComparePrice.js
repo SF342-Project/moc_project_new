@@ -28,24 +28,32 @@ import {
   Cols,
   Cell,
 } from 'react-native-table-component';
-import { useDispatch, useSelector } from 'react-redux';
-import { getComparePriceData, getCurrentPrice, getPriceNow } from '../redux/users/PriceSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getComparePrice,
+  getComparePriceData,
+  getCurrentPrice,
+  getInitialDate,
+  getPriceNow,
+} from '../redux/users/PriceSlice';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
 
   const currentPriceProduct = useSelector(getCurrentPrice);
-  const currentPrice = (currentPriceProduct.price_min + currentPriceProduct.price_max) / 2
-  console.log("Current",currentPrice)
-  const from = '2022-03-23'
-  const to = '2022-03-27'
+  const currentPrice =
+    (currentPriceProduct.price_min + currentPriceProduct.price_max) / 2;
+  
   const dispatch = useDispatch();
 
+  const initialDate = useSelector(getInitialDate);
+  const comparePrice = useSelector(getComparePrice);
+
   useEffect(() => {
-      dispatch(getPriceNow(id))
-      dispatch(getComparePriceData({id: id, from: from, to: to}))
-  }, [dispatch])
-  
+    dispatch(getPriceNow(id));
+    dispatch(getComparePriceData({id: id, from: initialDate.start, to: initialDate.end}));
+  }, [dispatch]);
+
   const getDateToday = () => {
     let day = new Date().getDate().toLocaleString();
     let month = (new Date().getMonth() + 1).toLocaleString();
@@ -59,9 +67,8 @@ export default function ComparePrice({route, navigation}) {
 
     return formatDateText;
   };
-
-  const [textStart, setTextStart] = useState('2022-01-01');
-  const [textEnd, setTextEnd] = useState(getDateToday);
+  const [textStart, setTextStart] = useState(initialDate.start);
+  const [textEnd, setTextEnd] = useState(initialDate.end);
 
   const API_URL =
     'https://dataapi.moc.go.th/gis-product-prices?product_id=' +
@@ -80,10 +87,10 @@ export default function ComparePrice({route, navigation}) {
   const [openEnd, setOpenEnd] = useState(false);
 
   const [chartData, setChartData] = useState({
-    labels: ['January'],
+    labels: currentPriceProduct.date,
     datasets: [
       {
-        data: [Math.random() * 100],
+        data: currentPrice,
       },
     ],
   });
@@ -108,25 +115,28 @@ export default function ComparePrice({route, navigation}) {
     setOpenStart(false);
     setTextStart(formatDate(date));
     setStartDate(date);
+    dispatch(getComparePriceData({id: id, from: textStart, to: textEnd}));
   };
 
   const ConfirmDateEnd = date => {
     setOpenEnd(false);
     setTextEnd(formatDate(date));
     setEndDate(date);
+    dispatch(getComparePriceData({id: id, from: textStart, to: textEnd}));
   };
 
   const chart = () => {
     let pDate = [];
     let mPrice = [];
     try {
-      for (let index = 0; index < data.price_list.length; index++) {
+      for (let index = 0; index < comparePrice.length; index++) {
+        console.log(comparePrice[index].date)
         let price =
-          (data.price_list[index].price_max +
-            data.price_list[index].price_min) /
+          (comparePrice[index].price_max +
+            comparePrice[index].price_min) /
           2;
         if (price != 0) {
-          pDate.push(data.price_list[index].date);
+          pDate.push(comparePrice[index].date);
           mPrice.push(price);
         }
       }
@@ -211,15 +221,11 @@ export default function ComparePrice({route, navigation}) {
 
                 <View style={{flexDirection: 'row'}}>
                   {diffPrice < 0 ? (
-                    <Text style={styles.CardPriceDown}>
-                      {currentPrice}
-                    </Text>
+                    <Text style={styles.CardPriceDown}>{currentPrice}</Text>
                   ) : null}
 
                   {diffPrice >= 0 ? (
-                    <Text style={styles.CardPriceUp}>
-                      {currentPrice}
-                    </Text>
+                    <Text style={styles.CardPriceUp}>{currentPrice}</Text>
                   ) : null}
 
                   <Text style={styles.CardUnit}>{data.unit}</Text>
@@ -243,7 +249,7 @@ export default function ComparePrice({route, navigation}) {
             </View>
           </View>
 
-          <View style={{alignSelf: 'center',marginTop:20,marginBottom: 20}}>
+          <View style={{alignSelf: 'center', marginTop: 20, marginBottom: 20}}>
             {!loading ? (
               <LineChart
                 data={chartData}
@@ -316,8 +322,7 @@ export default function ComparePrice({route, navigation}) {
               </View>
             </View>
 
-
-              {/* {!loading && averagePrice.length > 0 ? (
+            {/* {!loading && averagePrice.length > 0 ? (
                 <View style={styles.containerTable}>
                   <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                     <Row
@@ -333,7 +338,6 @@ export default function ComparePrice({route, navigation}) {
                   </Table>
                 </View>
               ) : null} */}
- 
           </View>
         </ScrollView>
       </SafeAreaView>

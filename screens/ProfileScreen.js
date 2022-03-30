@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient'
+import AppLoader from './AppLoader';
 
 export default function ProfileScreen({ navigation }) {
   const user = useSelector(getUsers);
@@ -13,11 +14,11 @@ export default function ProfileScreen({ navigation }) {
   const removeToken = () => {
     dispatch(authLogout())
       .unwrap()
-      .then(() => navigation.navigate('Home'));
+      .then(() => navigation.goBack());
   };
-  console.log(user);
   return (
-    <View>
+    <>
+    {user.length > 0? (<View>
       <View style={styles.Header}>
         <LinearGradient
           colors={['#0A214A', '#047FC7']}
@@ -35,17 +36,17 @@ export default function ProfileScreen({ navigation }) {
             </TouchableOpacity>
             <Text style={styles.HeaderText}>หน้าหลัก</Text>
           </View>
-          {<Text style={styles.head}>{user[0].name}</Text>}
+          <Text style={styles.head}>{user[0].name}</Text>
         </LinearGradient>
       </View>
 
       <View style={styles.databox}>
         <Entypo name="user" size={27} color="#0A214A" style={{ marginRight: 25, marginLeft: 10 }} />
-        {<Text style={styles.data}>{user[0].name}</Text>}
+        <Text style={styles.data}>{user[0].name}</Text>
       </View>
       <View style={styles.databox}>
         <Entypo name="mail" size={27} color="#0A214A" style={{ marginRight: 25, marginLeft: 10 }} />
-        {<Text style={styles.data}>{user[0].email}</Text>}
+        <Text style={styles.data}>{user[0].email}</Text>
       </View>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity style={styles.favButton} onPress={removeToken}>
@@ -60,7 +61,9 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.logoutText}>ออกจากระบบ</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </View>):(<AppLoader/>)}
+    </>
+    
   );
 }
 
