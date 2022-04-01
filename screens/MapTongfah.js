@@ -15,13 +15,20 @@ import BottomSheet from 'react-native-simple-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppLoader from './AppLoader';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from '../redux/users/UserSlice';
 
 export default function MapTongfah({navigation}) {
-  const API_URL = 'http://10.0.2.2:9000/Shop';
+  const API_URL = 'http://10.0.2.2:4000/shops/getAll';
 
   const [data, setData] = useState([]);
   const [filterdata, setFilterdata] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const user = useSelector(getUsers);
+  const favArr = user[0].shop_lists;
+
+  const dispatch = useDispatch();
 
   const getData = async () => {
     const response = await fetch(API_URL);
@@ -33,7 +40,7 @@ export default function MapTongfah({navigation}) {
 
   useEffect(() => {
     getData();
-  }, [API_URL]);
+  }, [API_URL, dispatch]);
 
   const onChangeText = text => {
     setFilterdata(
@@ -78,6 +85,10 @@ export default function MapTongfah({navigation}) {
       longitudeDelta: state.region.longitudeDelta,
     });
   };
+
+  const handleFavorite = (ord) => {
+    console.log(ord)
+  }
 
   const [state, setState] = useState(intitialMapState);
   const _map = React.useRef(null);
@@ -150,16 +161,14 @@ export default function MapTongfah({navigation}) {
                       <Text style={styles.fontReg}>{item.Contact}</Text>
                     </View>
                     <View style={{flex: 0.1}}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleFavorite(item.ord)}>
                       <Icon
                         name="bookmark"
                         size={30}
-                        color={'#2752E6'}
+                        color={favArr.includes(item.ord) ? '#2752E6' : 'darkgrey'}
                         style={{alignSelf: 'flex-end'}}
-                        
                       />
-                    </TouchableOpacity>
-                      
+                    </TouchableOpacity>                      
                     </View>
                   </View>
                 </TouchableOpacity>
