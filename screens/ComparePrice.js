@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,8 +16,8 @@ import DatePicker from 'react-native-date-picker';
 import useFetch from '../components/useFetch';
 import AppLoader from './AppLoader';
 
-import { LineChart } from 'react-native-chart-kit';
-import { ScrollView } from 'react-native-gesture-handler';
+import {LineChart} from 'react-native-chart-kit';
+import {ScrollView} from 'react-native-gesture-handler';
 
 import {
   Table,
@@ -28,7 +28,7 @@ import {
   Cols,
   Cell,
 } from 'react-native-table-component';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   getComparePrice,
   getComparePriceData,
@@ -36,15 +36,14 @@ import {
   getInitialDate,
   getPriceNow,
 } from '../redux/users/PriceSlice';
-import { Wrap } from 'native-base';
 
-export default function ComparePrice({ route, navigation }) {
-  const { name, id } = route.params;
+export default function ComparePrice({route, navigation}) {
+  const {name, id} = route.params;
 
   const currentPriceProduct = useSelector(getCurrentPrice);
   const currentPrice =
     (currentPriceProduct.price_min + currentPriceProduct.price_max) / 2;
-
+  
   const dispatch = useDispatch();
 
   const initialDate = useSelector(getInitialDate);
@@ -52,7 +51,7 @@ export default function ComparePrice({ route, navigation }) {
 
   useEffect(() => {
     dispatch(getPriceNow(id));
-    dispatch(getComparePriceData({ id: id, from: initialDate.start, to: initialDate.end }));
+    dispatch(getComparePriceData({id: id, from: initialDate.start, to: initialDate.end}));
   }, [dispatch]);
 
   const getDateToday = () => {
@@ -79,7 +78,7 @@ export default function ComparePrice({ route, navigation }) {
     '&to_date=' +
     textEnd;
 
-  const { data, loading, refetch } = useFetch(API_URL);
+  const {data, loading, refetch} = useFetch(API_URL);
 
   const [startDate, setStartDate] = useState(new Date());
   const [openStart, setOpenStart] = useState(false);
@@ -116,14 +115,14 @@ export default function ComparePrice({ route, navigation }) {
     setOpenStart(false);
     setTextStart(formatDate(date));
     setStartDate(date);
-    dispatch(getComparePriceData({ id: id, from: textStart, to: textEnd }));
+    dispatch(getComparePriceData({id: id, from: textStart, to: textEnd}));
   };
 
   const ConfirmDateEnd = date => {
     setOpenEnd(false);
     setTextEnd(formatDate(date));
     setEndDate(date);
-    dispatch(getComparePriceData({ id: id, from: textStart, to: textEnd }));
+    dispatch(getComparePriceData({id: id, from: textStart, to: textEnd}));
   };
 
   const chart = () => {
@@ -143,7 +142,7 @@ export default function ComparePrice({ route, navigation }) {
       }
       setPriceDateArr(pDate);
       setAveragePrice(mPrice);
-    } catch (error) { }
+    } catch (error) {}
 
     setChartData({
       labels: pDate,
@@ -168,7 +167,7 @@ export default function ComparePrice({ route, navigation }) {
       let month = date.split('T')[0].split('-')[1];
       let day = date.split('T')[0].split('-')[2];
       return 'ราคาเฉลี่ยล่าสุด ณ วันที่ ' + day + '/' + month + '/' + year;
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const diffPrice =
@@ -176,8 +175,6 @@ export default function ComparePrice({ route, navigation }) {
     averagePrice[averagePrice.length - 2];
 
   const percent = (diffPrice / averagePrice[averagePrice.length - 2]) * 100;
-
-  const [savingBookmark, setSavingBookmark] = useState(false);
 
   const chartConfig = {
     backgroundColor: '#2752E6',
@@ -197,13 +194,14 @@ export default function ComparePrice({ route, navigation }) {
       stroke: '#0A214A',
     },
   };
+
   return (
     <>
       <SafeAreaView style={styles.Container}>
         <ScrollView>
           {/* Header */}
           <View style={styles.Header}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Entypo
                   name="chevron-thin-left"
@@ -217,11 +215,11 @@ export default function ComparePrice({ route, navigation }) {
 
           {/* Content */}
           <View style={styles.Content}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 0.8 }}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 0.8}}>
                 <Text style={styles.HeaderContent}>{name}</Text>
 
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   {diffPrice < 0 ? (
                     <Text style={styles.CardPriceDown}>{currentPrice}</Text>
                   ) : null}
@@ -232,35 +230,26 @@ export default function ComparePrice({ route, navigation }) {
 
                   <Text style={styles.CardUnit}>{data.unit}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={styles.CardDate}>
-                    {formatDateText(currentPriceProduct.date)}
-                  </Text>
-                  <TouchableOpacity onPress={() => setSavingBookmark(true)}>
-                    {savingBookmark ? (
-                      <FontAwesome5 name="bookmark" size={25} solid style={{ marginLeft: 125, color: "#FFE248" }}></FontAwesome5>
-                    ) : (
-                      <FontAwesome5 name="bookmark" size={25} style={{ marginLeft: 125, color: "#2752E6" }}></FontAwesome5>
-                    )}
-                  </TouchableOpacity>
-                </View>
+                <Text style={styles.CardDate}>
+                  {formatDateText(currentPriceProduct.date)}
+                </Text>
               </View>
 
               {percent < 0 ? (
-                <View style={{ flex: 0.3 }}>
+                <View style={{flex: 0.3}}>
                   <Text style={styles.PercentDown}>{percent.toFixed(2)}%</Text>
                 </View>
               ) : null}
 
               {percent >= 0 ? (
-                <View style={{ flex: 0.3 }}>
+                <View style={{flex: 0.3}}>
                   <Text style={styles.PercentUp}>{percent.toFixed(2)}%</Text>
                 </View>
               ) : null}
             </View>
           </View>
 
-          <View style={{ alignSelf: 'center', marginTop: 20, marginBottom: 20 }}>
+          <View style={{alignSelf: 'center', marginTop: 20, marginBottom: 20}}>
             {!loading ? (
               <LineChart
                 data={chartData}
@@ -272,7 +261,7 @@ export default function ComparePrice({ route, navigation }) {
                 withDots={false}
                 bezier
                 withVerticalLabels={false}
-                style={{ borderRadius: 20, padding: 5 }}
+                style={{borderRadius: 20, padding: 5}}
                 withInnerLines={false}
                 withOuterLines={false}
               />
@@ -280,13 +269,13 @@ export default function ComparePrice({ route, navigation }) {
           </View>
 
           <View style={styles.Content}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <Text style={styles.LabelDate}>ตั้งแต่วันที่</Text>
-              <View style={{ alignItems: 'center', paddingBottom: 20 }}>
+              <View style={{alignItems: 'center', paddingBottom: 20}}>
                 <View style={styles.input_f}>
                   <TouchableOpacity
                     onPress={() => setOpenStart(true)}
-                    style={{ borderRadius: 15 }}>
+                    style={{borderRadius: 15}}>
                     <FontAwesome5 name="calendar" size={17}></FontAwesome5>
                   </TouchableOpacity>
                   <DatePicker
@@ -304,7 +293,7 @@ export default function ComparePrice({ route, navigation }) {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <Text style={styles.LabelDate}>ถึงวันที่</Text>
               <View
                 style={{
@@ -315,7 +304,7 @@ export default function ComparePrice({ route, navigation }) {
                 <View style={styles.input_f}>
                   <TouchableOpacity
                     onPress={() => setOpenEnd(true)}
-                    style={{ borderRadius: 15 }}>
+                    style={{borderRadius: 15}}>
                     <FontAwesome5 name="calendar" size={17}></FontAwesome5>
                   </TouchableOpacity>
                   <DatePicker
@@ -364,8 +353,8 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     backgroundColor: '#fff',
   },
-  head: { height: 50, backgroundColor: '#f1f8ff' },
-  text: { fontSize: 10 },
+  head: {height: 50, backgroundColor: '#f1f8ff'},
+  text: {fontSize: 10},
   Container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -433,10 +422,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: '#000',
   },
-  BookmarkIcon: {
-    backgroundColor: 'red',
-    textAlign: 'right',
-  },
   CardUnit: {
     fontFamily: 'Prompt-Regular',
     fontSize: 15,
@@ -486,7 +471,7 @@ const styles = StyleSheet.create({
   },
   HeaderText: {
     textShadowColor: '#000000',
-    textShadowOffset: { width: 0, height: 1 },
+    textShadowOffset: {width: 0, height: 1},
     textShadowRadius: 10,
     marginTop: 15,
     marginLeft: 15,
