@@ -43,6 +43,12 @@ export const fetchUserData = createAsyncThunk('user/getUser', async id => {
   return res.data.user;
 });
 
+export const addShopFavorite = createAsyncThunk('favorite/addShop', async data => {
+  const res = await UserService.addShop(data);
+  console.log(res.data)
+  return data.shop_id;
+})
+
 const initialState = {
   users: {},
   token: '',
@@ -73,6 +79,11 @@ const UserSlice = createSlice({
       console.log('Fetch Sucess!!');
       return {...state, users: payload};
     },
+    [addShopFavorite.fulfilled]: (state, {payload}) => {
+      console.log('Add Shop Sucess!!');
+      return {...state, users: payload};
+    },
+    
   },
 });
 

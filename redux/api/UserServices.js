@@ -16,6 +16,10 @@ const getUser = id => {
   return MocApi.get(`/user/${id}`);
 };
 
-const UserService = {login, getUser, register, logout};
+const addShop = data => {
+  return MocApi.post('/favorites/shop', data);
+}
+
+const UserService = {login, getUser, register, logout, addShop};
 
 export default UserService;
