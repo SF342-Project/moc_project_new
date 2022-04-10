@@ -16,20 +16,16 @@ const getDateToday = () => {
 };
 
 const get7dayAfter = () => {
-  var date = new Date();
-  date.setDate(date.getDate() - 7);
-
-  var day = date.getDate();
-
-  let month = (date.getMonth() + 1).toLocaleString();
+  var day = (new Date().getDate() - 7).toLocaleString();
+  let month = (new Date().getMonth() + 1).toLocaleString();
+  
   if (day.length == 1) {
     day = '0' + day;
   }
   if (month.length == 1) {
     month = '0' + month;
   }
-
-  return date.getFullYear() + '-' + month + '-' + date.getDate();
+  return new Date().getFullYear() + '-' + month + '-' + day;
 };
 
 export const getPriceNow = createAsyncThunk('price/getPriceNow', async id => {
