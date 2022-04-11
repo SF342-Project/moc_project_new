@@ -9,6 +9,7 @@ import MapTongfah from "../screens/MapTongfah";
 import ComparePrice from "../screens/ComparePrice";
 import RegisterScreen from "../screens/RegisterScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import FavoriteShop from "../screens/FavoriteShop";
 
 const Stack = createStackNavigator();
 
@@ -62,6 +63,11 @@ function AppStack() {
       <Stack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
+        options={{header: () => null}}
+      />
+      <Stack.Screen
+        name="FavoriteShop"
+        component={FavoriteShop}
         options={{header: () => null}}
       />
     </Stack.Navigator>

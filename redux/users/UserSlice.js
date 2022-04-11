@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import UserService from '../api/UserServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { get } from 'underscore';
 
 export const authlogin = createAsyncThunk('users/login', async data => {
   const res = await UserService.login(data);
@@ -62,6 +63,17 @@ export const deleteShopFavorite = createAsyncThunk(
   },
 );
 
+export const getShopFavorite = createAsyncThunk(
+  'favorite/getShop',
+  async data => {
+    console.log("Get Shop!!")
+    const res = await UserService.getShop(data)
+      .catch(err => console.log('Err: ', err))
+      .then(res => console.log('Res: ', res));
+    return data.shop_id;
+  },
+);
+
 const initialState = {
   users: {},
   token: '',
@@ -106,8 +118,10 @@ const UserSlice = createSlice({
     },
     [deleteShopFavorite.rejected]: (state, {payload}) => {
       console.log('Delete Shop Rejected!!');
- 
     },
+    [getShopFavorite.fulfilled]: (state, {payload}) => {
+      console.log("Get Shop Success!!")
+    }
   },
 });
 
