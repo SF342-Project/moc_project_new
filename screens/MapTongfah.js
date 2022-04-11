@@ -15,8 +15,14 @@ import BottomSheet from 'react-native-simple-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppLoader from './AppLoader';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../redux/users/UserSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getUsers,
+  addShopFavorite,
+  fetchUserData,
+} from '../redux/users/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
 
 export default function MapTongfah({navigation}) {
   const API_URL = 'http://10.0.2.2:4000/shops/getAll';
@@ -24,9 +30,12 @@ export default function MapTongfah({navigation}) {
   const [data, setData] = useState([]);
   const [filterdata, setFilterdata] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [checkFavorite, setCheckFavorite] = useState(false);
+  const [fetched, setFetched] = useState(false);
 
   const user = useSelector(getUsers);
-  const favArr = user[0].shop_lists;
+
+  const favArr = user[0]?.shop_lists;
 
   const dispatch = useDispatch();
 
@@ -38,9 +47,19 @@ export default function MapTongfah({navigation}) {
     setLoading(false);
   };
 
+  const fetchData = async () => {
+    console.log('Fetch User Data');
+    const token = await AsyncStorage.getItem('token');
+    if (token !== null) {
+      var decoded = jwtDecode(token);
+      dispatch(fetchUserData(decoded._id));
+    }
+  };
+
   useEffect(() => {
     getData();
-  }, [API_URL, dispatch]);
+    fetchData();
+  }, [dispatch]);
 
   const onChangeText = text => {
     setFilterdata(
@@ -86,9 +105,16 @@ export default function MapTongfah({navigation}) {
     });
   };
 
-  const handleFavorite = (ord) => {
-    console.log(ord)
-  }
+  const handleFavorite = ord => {
+    console.log(ord);
+    if (favArr.includes(ord)) {
+      console.log('Fav:', ord);
+    } else {
+      console.log('Not Fav:', ord);
+      dispatch(addShopFavorite({_id: user[0]._id, shop_id: ord}))
+        .unwrap()
+    }
+  };
 
   const [state, setState] = useState(intitialMapState);
   const _map = React.useRef(null);
@@ -161,14 +187,17 @@ export default function MapTongfah({navigation}) {
                       <Text style={styles.fontReg}>{item.Contact}</Text>
                     </View>
                     <View style={{flex: 0.1}}>
-                    <TouchableOpacity onPress={() => handleFavorite(item.ord)}>
-                      <Icon
-                        name="bookmark"
-                        size={30}
-                        color={favArr.includes(item.ord) ? '#2752E6' : 'darkgrey'}
-                        style={{alignSelf: 'flex-end'}}
-                      />
-                    </TouchableOpacity>                      
+                      <TouchableOpacity
+                        onPress={() => handleFavorite(item.ord)}>
+                        <Icon
+                          name="bookmark"
+                          size={30}
+                          color={
+                            favArr.includes(item.ord) ? '#2752E6' : 'darkgrey'
+                          }
+                          style={{alignSelf: 'flex-end'}}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -212,7 +241,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
-    flexDirection:'row'
+    flexDirection: 'row',
   },
   signIn: {
     width: '100%',

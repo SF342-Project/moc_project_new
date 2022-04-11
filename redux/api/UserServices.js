@@ -20,6 +20,10 @@ const addShop = data => {
   return MocApi.post('/favorites/shop', data);
 }
 
-const UserService = {login, getUser, register, logout, addShop};
+const delShop = data => {
+  return MocApi.delete('/favorites/shop', data);
+}
+
+const UserService = {login, getUser, register, logout, addShop, delShop};
 
 export default UserService;

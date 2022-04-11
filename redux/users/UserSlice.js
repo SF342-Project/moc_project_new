@@ -44,8 +44,15 @@ export const fetchUserData = createAsyncThunk('user/getUser', async id => {
 });
 
 export const addShopFavorite = createAsyncThunk('favorite/addShop', async data => {
+  console.log("Add Shop")
   const res = await UserService.addShop(data);
-  console.log(res.data)
+  console.log("Data", res.data)
+  return data.shop_id;
+})
+
+export const deleteShopFavorite = createAsyncThunk('favorite/deleteShop', async data => {
+  console.log("Delete Shop")
+  const res = await UserService.delShop(data);
   return data.shop_id;
 })
 
@@ -81,8 +88,15 @@ const UserSlice = createSlice({
     },
     [addShopFavorite.fulfilled]: (state, {payload}) => {
       console.log('Add Shop Sucess!!');
-      return {...state, users: payload};
+      let user = state.users[0]
+      user.shop_lists.push(payload)
+      console.log(user)
+      
     },
+    [deleteShopFavorite.fulfilled]: (state, {payload}) => {
+      console.log('Delete Shop Sucess!!');
+      return {...state}
+    }
     
   },
 });
