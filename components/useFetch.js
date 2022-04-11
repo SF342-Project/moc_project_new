@@ -19,7 +19,6 @@ const useFetch = url => {
 
   const refetch = async () => {
     try {
-      console.log("Refetch");
       const response = await fetch(url);
       const fetchdata = await response.json();
       setData(fetchdata);

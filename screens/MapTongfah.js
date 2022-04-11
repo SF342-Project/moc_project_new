@@ -20,6 +20,7 @@ import {
   getUsers,
   addShopFavorite,
   fetchUserData,
+  deleteShopFavorite,
 } from '../redux/users/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
@@ -48,7 +49,6 @@ export default function MapTongfah({navigation}) {
   };
 
   const fetchData = async () => {
-    console.log('Fetch User Data');
     const token = await AsyncStorage.getItem('token');
     if (token !== null) {
       var decoded = jwtDecode(token);
@@ -106,13 +106,10 @@ export default function MapTongfah({navigation}) {
   };
 
   const handleFavorite = ord => {
-    console.log(ord);
     if (favArr.includes(ord)) {
-      console.log('Fav:', ord);
+      dispatch(deleteShopFavorite({_id: user[0]._id, shop_id: ord})).unwrap();
     } else {
-      console.log('Not Fav:', ord);
-      dispatch(addShopFavorite({_id: user[0]._id, shop_id: ord}))
-        .unwrap()
+      dispatch(addShopFavorite({_id: user[0]._id, shop_id: ord})).unwrap();
     }
   };
 
@@ -170,7 +167,7 @@ export default function MapTongfah({navigation}) {
           <FlatList
             data={filterdata}
             ItemSeparatorComponent={FlatListItemSeparator}
-            initialNumToRender={7}
+            initialNumToRender={3}
             renderItem={({item, index}) => (
               <View>
                 <TouchableOpacity

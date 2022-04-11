@@ -17,7 +17,7 @@ export const authlogin = createAsyncThunk('users/login', async data => {
 export const authLogout = createAsyncThunk('user/logout', async () => {
   try {
     await AsyncStorage.removeItem('token');
-    console.log("Token After Logout: ",await AsyncStorage.getItem('token'));
+    console.log('Token After Logout: ', await AsyncStorage.getItem('token'));
   } catch (error) {
     console.log(error);
   }
@@ -43,18 +43,24 @@ export const fetchUserData = createAsyncThunk('user/getUser', async id => {
   return res.data.user;
 });
 
-export const addShopFavorite = createAsyncThunk('favorite/addShop', async data => {
-  console.log("Add Shop")
-  const res = await UserService.addShop(data);
-  console.log("Data", res.data)
-  return data.shop_id;
-})
+export const addShopFavorite = createAsyncThunk(
+  'favorite/addShop',
+  async data => {
+    console.log('Add Shop');
+    const res = await UserService.addShop(data);
+    return data.shop_id;
+  },
+);
 
-export const deleteShopFavorite = createAsyncThunk('favorite/deleteShop', async data => {
-  console.log("Delete Shop")
-  const res = await UserService.delShop(data);
-  return data.shop_id;
-})
+export const deleteShopFavorite = createAsyncThunk(
+  'favorite/delShop',
+  async data => {
+    const res = await UserService.deleteShop(data)
+      .catch(err => console.log('Err: ', err))
+      .then(res => console.log('Res: ', res));
+    return data.shop_id;
+  },
+);
 
 const initialState = {
   users: {},
@@ -80,7 +86,7 @@ const UserSlice = createSlice({
     },
     [authLogout.fulfilled]: state => {
       console.log('Logout Success!!');
-      return {...state, users: {token: ""}};
+      return {...state, users: {token: ''}};
     },
     [fetchUserData.fulfilled]: (state, {payload}) => {
       console.log('Fetch Sucess!!');
@@ -88,16 +94,20 @@ const UserSlice = createSlice({
     },
     [addShopFavorite.fulfilled]: (state, {payload}) => {
       console.log('Add Shop Sucess!!');
-      let user = state.users[0]
-      user.shop_lists.push(payload)
-      console.log(user)
-      
+      let user = state.users[0];
+      user.shop_lists.push(payload);
+
     },
     [deleteShopFavorite.fulfilled]: (state, {payload}) => {
       console.log('Delete Shop Sucess!!');
-      return {...state}
-    }
-    
+      let user = state.users[0].shop_lists;
+      user.splice(user.indexOf(payload), 1);
+
+    },
+    [deleteShopFavorite.rejected]: (state, {payload}) => {
+      console.log('Delete Shop Rejected!!');
+ 
+    },
   },
 });
 
