@@ -78,9 +78,7 @@ export default function FavoriteShop() {
                   <Icon
                     name="bookmark"
                     size={30}
-                    color={
-                     '#2752E6'
-                    }
+                    color={'#2752E6'}
                     style={{alignSelf: 'flex-end'}}
                   />
                 </TouchableOpacity>
