@@ -14,18 +14,16 @@ export default function FavoriteShop() {
   const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
-    console.log('Shop: ',user[0].shop_lists);
     axios
       .post('http://10.0.2.2:4000/favorites/getShop', {
         ord: user[0].shop_lists,
       })
       .then(response => {
-        console.log("res: ",response.data);
         setData(response.data);
         setLoading(false);
       })
       .catch(err => {
-        console.log('Get fail', err);
+        console.log('Get Fail: ', err);
       });
   };
 

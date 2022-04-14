@@ -18,6 +18,8 @@ import AppLoader from './AppLoader';
 
 import {LineChart} from 'react-native-chart-kit';
 import {ScrollView} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 import {
   Table,
@@ -192,9 +194,9 @@ export default function ComparePrice({route, navigation}) {
           {/* Content */}
           <View style={styles.Content}>
             <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 0.8}}>
+              <View style={{flex: 0.9}}>
                 <Text style={styles.HeaderContent}>{name}</Text>
-
+                
                 <View style={{flexDirection: 'row'}}>
                   {diffPrice < 0 ? (
                     <Text style={styles.CardPriceDown}>
@@ -214,6 +216,17 @@ export default function ComparePrice({route, navigation}) {
                   {formatDateText(priceDateArr[priceDateArr.length - 1])}
                 </Text>
               </View>
+              <View style={{flex: 0.21, padding:0, alignItems: 'flex-start'}}>
+                <TouchableOpacity>
+                <Icon
+                    name="heart"
+                    size={25}
+                    color={'#e12d2d'}
+                    style={{alignSelf: 'flex-end'}}
+                  />
+                </TouchableOpacity>
+              </View>
+  
 
               {percent < 0 ? (
                 <View style={{flex: 0.3}}>
@@ -229,7 +242,7 @@ export default function ComparePrice({route, navigation}) {
             </View>
           </View>
 
-          <View style={{alignSelf: 'center',marginTop:20,marginBottom: 20}}>
+          <View style={{alignSelf: 'center', marginTop: 20, marginBottom: 20}}>
             {!loading ? (
               <LineChart
                 data={chartData}
@@ -302,8 +315,7 @@ export default function ComparePrice({route, navigation}) {
               </View>
             </View>
 
-
-              {/* {!loading && averagePrice.length > 0 ? (
+            {/* {!loading && averagePrice.length > 0 ? (
                 <View style={styles.containerTable}>
                   <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                     <Row
@@ -319,7 +331,6 @@ export default function ComparePrice({route, navigation}) {
                   </Table>
                 </View>
               ) : null} */}
- 
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -386,16 +397,16 @@ const styles = StyleSheet.create({
   PercentDown: {
     color: 'red',
     fontFamily: 'Prompt-Bold',
-    fontSize: 30,
+    fontSize: 25,
     alignSelf: 'center',
-    top: 40,
+    top: 50,
   },
   PercentUp: {
     color: 'green',
     fontFamily: 'Prompt-Bold',
-    fontSize: 30,
+    fontSize: 25,
     alignSelf: 'center',
-    top: 40,
+    top: 50,
   },
   CardDate: {
     fontFamily: 'Prompt-Regular',
