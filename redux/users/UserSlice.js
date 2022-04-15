@@ -1,7 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import UserService from '../api/UserServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { get } from 'underscore';
+import {get} from 'underscore';
 
 export const authlogin = createAsyncThunk('users/login', async data => {
   const res = await UserService.login(data);
@@ -66,11 +66,30 @@ export const deleteShopFavorite = createAsyncThunk(
 export const getShopFavorite = createAsyncThunk(
   'favorite/getShop',
   async data => {
-    console.log("Get Shop!!")
+    console.log('Get Shop!!');
     const res = await UserService.getShop(data)
       .catch(err => console.log('Err: ', err))
       .then(res => console.log('Res: ', res));
     return data.shop_id;
+  },
+);
+
+export const addProuctFavorite = createAsyncThunk(
+  'favorite/addProduct',
+  async data => {
+    console.log('Add Shop');
+    const res = await UserService.addProduct(data);
+    return data.product_id;
+  },
+);
+
+export const deleteProuctFavorite = createAsyncThunk(
+  'favorite/delProduct',
+  async data => {
+    const res = await UserService.deleteProduct(data)
+      .catch(err => console.log('Err: ', err))
+      .then(res => console.log('Res: ', res));
+    return data.product_id;
   },
 );
 
@@ -108,20 +127,28 @@ const UserSlice = createSlice({
       console.log('Add Shop Sucess!!');
       let user = state.users[0];
       user.shop_lists.push(payload);
-
     },
     [deleteShopFavorite.fulfilled]: (state, {payload}) => {
       console.log('Delete Shop Sucess!!');
       let user = state.users[0].shop_lists;
       user.splice(user.indexOf(payload), 1);
-
     },
     [deleteShopFavorite.rejected]: (state, {payload}) => {
       console.log('Delete Shop Rejected!!');
     },
     [getShopFavorite.fulfilled]: (state, {payload}) => {
-      console.log("Get Shop Success!!")
-    }
+      console.log('Get Shop Success!!');
+    },
+    [addProuctFavorite.fulfilled]: (state, {payload}) => {
+      console.log('Add Product Sucess!!');
+      let user = state.users[0];
+      user.product_lists.push(payload);
+    },
+    [deleteProuctFavorite.fulfilled]: (state, {payload}) => {
+      console.log('Delete Product Sucess!!');
+      let user = state.users[0].product_lists;
+      user.splice(user.indexOf(payload), 1);
+    },
   },
 });
 

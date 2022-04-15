@@ -30,6 +30,8 @@ import {
   Cols,
   Cell,
 } from 'react-native-table-component';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProuctFavorite, deleteProuctFavorite, getUsers } from '../redux/users/UserSlice';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
@@ -173,6 +175,18 @@ export default function ComparePrice({route, navigation}) {
     },
   };
 
+  const dispatch = useDispatch();
+
+  const user = useSelector(getUsers);
+
+  const onPressFav = () => {
+    if(user[0].product_lists.includes(id)) {
+      dispatch(deleteProuctFavorite({_id: user[0]._id, product_id: id})).unwrap();
+    } else {
+      dispatch(addProuctFavorite({_id: user[0]._id, product_id: id})).unwrap();
+    }
+  }
+
   return (
     <>
       <SafeAreaView style={styles.Container}>
@@ -217,11 +231,11 @@ export default function ComparePrice({route, navigation}) {
                 </Text>
               </View>
               <View style={{flex: 0.21, padding:0, alignItems: 'flex-start'}}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onPressFav}>
                 <Icon
                     name="heart"
                     size={25}
-                    color={'#e12d2d'}
+                    color={user[0].product_lists.includes(id) ? '#e12d2d' : 'darkgrey'}
                     style={{alignSelf: 'flex-end'}}
                   />
                 </TouchableOpacity>

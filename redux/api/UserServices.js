@@ -18,17 +18,38 @@ const getUser = id => {
 
 const addShop = data => {
   return MocApi.post('/favorites/shop', data);
-}
+};
 
 const deleteShop = data => {
   return MocApi.put('/favorites/shop', data);
-}
+};
 
 const getShop = data => {
-  return MocApi.get('/favorites/shop', data)
-}
+  return MocApi.get('/favorites/shop', data);
+};
 
+const addProduct = data => {
+  return MocApi.post('/favorites/product', data);
+};
 
-const UserService = {login, getUser, register, logout, addShop, deleteShop, getShop};
+const deleteProduct = data => {
+  return MocApi.put('/favorites/product', data);
+};
+
+const getProduct = data => {
+  return MocApi.get('/favorites/getProduct', data);
+};
+
+const UserService = {
+  login,
+  getUser,
+  register,
+  logout,
+  addShop,
+  deleteShop,
+  getShop,
+  addProduct,
+  deleteProduct,
+};
 
 export default UserService;
