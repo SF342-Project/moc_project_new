@@ -6,12 +6,15 @@ import {FlatList} from 'react-native-gesture-handler';
 import axios from 'axios';
 import AppLoader from './AppLoader';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
+import { useIsFocused } from '@react-navigation/native';
 
-export default function FavoriteProduct() {
+export default function FavoriteProduct({navigation}) {
   const user = useSelector(getUsers);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isFocused = useIsFocused();
 
   const fetchData = () => {
     axios
@@ -29,51 +32,64 @@ export default function FavoriteProduct() {
 
   useEffect(() => {
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, isFocused]);
 
-  console.log(data);
   return (
-    <View>
-      <Text>FavoriteProduct</Text>
-      <FlatList
-        data={data}
-        initialNumToRender={7}
-        renderItem={({item}) => {
-          return (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                navigation.navigate('ComparePrice', {
-                  name: item.name,
-                  id: item.id,
-                })
-              }>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 0.8}}>
-                  <Text style={styles.Headnotes}>{item.name}</Text>
-                  <Text style={styles.CardDate}>รหัสสินค้า: {item.id}</Text>
-                </View>
-                <View style={{flex: 0.2}}>
-                  <Image
-                    source={require('../assets/images/logo.png')}
-                    style={styles.CardImage}
-                  />
-                </View>
-              </View>
+    <>
+      <View>
+        <View style={styles.profile}>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Entypo
+                name="chevron-thin-left"
+                size={30}
+                style={styles.Image}
+                color={'#fff'}></Entypo>
             </TouchableOpacity>
-          );
-        }}
-        ListEmptyComponent={() => (
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text style={styles.Text}>ไม่มีข้อมูล</Text>
+            <Text style={styles.welcome}>รายการโปรดสินค้า</Text>
           </View>
-        )}
-      />
-    </View>
+        </View>
+        <FlatList
+          data={data}
+          initialNumToRender={7}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() =>
+                  navigation.navigate('ComparePrice', {
+                    name: item.name,
+                    id: item.id,
+                  })
+                }>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 0.8}}>
+                    <Text style={styles.Headnotes}>{item.name}</Text>
+                    <Text style={styles.CardDate}>รหัสสินค้า: {item.id}</Text>
+                  </View>
+                  <View style={{flex: 0.2}}>
+                    <Image
+                      source={require('../assets/images/logo.png')}
+                      style={styles.CardImage}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={styles.Text}>ไม่มีข้อมูล</Text>
+            </View>
+          )}
+        />
+      </View>
+      {loading || !isFocused ? <AppLoader /> : null}
+    </>
   );
 }
 
@@ -102,5 +118,32 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: '#fff',
+  },
+  Image: {
+    marginTop: 15,
+    marginBottom: 15,
+    marginLeft: 5,
+    width: 30,
+    height: 30,
+  },
+  welcome: {
+    textShadowColor: '#000000',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 10,
+    marginTop: 15,
+    marginBottom: 15,
+
+    marginLeft: 15,
+    fontFamily: 'Prompt-Bold',
+    fontSize: 20,
+    color: '#FFFFFF',
+  },
+  profile: {
+    marginBottom: 10,
+    backgroundColor: '#0A214A',
+    shadowColor: '#000000',
+    shadowOpacity: 5,
+    shadowRadius: 5,
+    elevation: 5,
   },
 });

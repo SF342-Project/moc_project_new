@@ -51,7 +51,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity style={styles.favButton}onPress={() => navigation.navigate('FavoriteProduct')}>
           <Entypo name="shop" size={27} color="#0BA3FC" style={{ marginRight: 25, marginLeft: 10 }} />
-          <Text style={styles.favText}>รายการโปรดราคาสินค้า</Text>
+          <Text style={styles.favText}>รายการโปรดสินค้า</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.favButton} onPress={() => navigation.navigate("FavoriteShop")}>
           <Icon name="map-o" size={25} color="#0BA3FC" style={{ marginRight: 25, marginLeft: 10 }} />
