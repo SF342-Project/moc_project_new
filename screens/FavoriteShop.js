@@ -82,14 +82,12 @@ export default function FavoriteShop() {
                     <Text style={styles.fontReg}>{item.Contact}</Text>
                   </View>
                   <View style={{flex: 0.1}}>
-                    <TouchableOpacity>
                       <Icon
                         name="bookmark"
                         size={30}
                         color={'#2752E6'}
                         style={{alignSelf: 'flex-end'}}
                       />
-                    </TouchableOpacity>
                   </View>
                 </View>
               </TouchableOpacity>
