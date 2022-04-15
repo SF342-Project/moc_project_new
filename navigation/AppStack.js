@@ -1,15 +1,16 @@
-import React from "react";
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Home from "../screens/Homepage";
-import TongfahLocation from "../screens/TongfahLocation";
-import LoginScreen from "../screens/LoginScreen";
+import Home from '../screens/Homepage';
+import TongfahLocation from '../screens/TongfahLocation';
+import LoginScreen from '../screens/LoginScreen';
 
-import ProductLists from "../screens/ProductLists";
-import MapTongfah from "../screens/MapTongfah";
-import ComparePrice from "../screens/ComparePrice";
-import RegisterScreen from "../screens/RegisterScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import FavoriteShop from "../screens/FavoriteShop";
+import ProductLists from '../screens/ProductLists';
+import MapTongfah from '../screens/MapTongfah';
+import ComparePrice from '../screens/ComparePrice';
+import RegisterScreen from '../screens/RegisterScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import FavoriteShop from '../screens/FavoriteShop';
+import FavoriteProduct from '../screens/FavoriteProduct';
 
 const Stack = createStackNavigator();
 
@@ -22,18 +23,18 @@ function AppStack() {
         options={{header: () => null}}
       />
       <Stack.Screen
-      name="TongfahScreen"
-      component={TongfahLocation}
-      options={{
-        title: 'สถานที่ร้านธงฟ้า',
-        headerStyle: {
-          backgroundColor: '#091D42',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}
+        name="TongfahScreen"
+        component={TongfahLocation}
+        options={{
+          title: 'สถานที่ร้านธงฟ้า',
+          headerStyle: {
+            backgroundColor: '#091D42',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
       />
       <Stack.Screen
         component={RegisterScreen}
@@ -41,14 +42,14 @@ function AppStack() {
         options={{header: () => null}}
       />
       <Stack.Screen
-      name="ProductLists"
-      component={ProductLists}
-      options={{header: () => null}}
+        name="ProductLists"
+        component={ProductLists}
+        options={{header: () => null}}
       />
       <Stack.Screen
-      name="MapTongfah"
-      component={MapTongfah}
-      options={{header: () => null}}
+        name="MapTongfah"
+        component={MapTongfah}
+        options={{header: () => null}}
       />
       <Stack.Screen
         component={LoginScreen}
@@ -68,6 +69,11 @@ function AppStack() {
       <Stack.Screen
         name="FavoriteShop"
         component={FavoriteShop}
+        options={{header: () => null}}
+      />
+      <Stack.Screen
+        name="FavoriteProduct"
+        component={FavoriteProduct}
         options={{header: () => null}}
       />
     </Stack.Navigator>

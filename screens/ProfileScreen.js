@@ -49,7 +49,7 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.data}>{user[0].email}</Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <TouchableOpacity style={styles.favButton}>
+        <TouchableOpacity style={styles.favButton}onPress={() => navigation.navigate('FavoriteProduct')}>
           <Entypo name="shop" size={27} color="#0BA3FC" style={{ marginRight: 25, marginLeft: 10 }} />
           <Text style={styles.favText}>รายการโปรดราคาสินค้า</Text>
         </TouchableOpacity>

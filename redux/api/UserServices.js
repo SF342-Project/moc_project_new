@@ -37,7 +37,7 @@ const deleteProduct = data => {
 };
 
 const getProduct = data => {
-  return MocApi.get('/favorites/getProduct', data);
+  return MocApi.post('/favorites/getProduct', data);
 };
 
 const UserService = {
@@ -50,6 +50,7 @@ const UserService = {
   getShop,
   addProduct,
   deleteProduct,
+  getProduct
 };
 
 export default UserService;
