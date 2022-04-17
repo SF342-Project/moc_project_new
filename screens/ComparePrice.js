@@ -32,9 +32,14 @@ import {
 } from 'react-native-table-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProuctFavorite, deleteProuctFavorite, getUsers } from '../redux/users/UserSlice';
+import { getInitialDate } from '../redux/users/PriceSlice';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
+
+  const user = useSelector(getUsers);
+
+  const initialDate = useSelector(getInitialDate);
 
   const getDateToday = () => {
     let day = new Date().getDate().toLocaleString();
@@ -50,8 +55,8 @@ export default function ComparePrice({route, navigation}) {
     return formatDateText;
   };
 
-  const [textStart, setTextStart] = useState('2022-01-01');
-  const [textEnd, setTextEnd] = useState(getDateToday);
+  const [textStart, setTextStart] = useState(initialDate.start);
+  const [textEnd, setTextEnd] = useState(initialDate.end);
 
   const API_URL =
     'https://dataapi.moc.go.th/gis-product-prices?product_id=' +
@@ -177,7 +182,7 @@ export default function ComparePrice({route, navigation}) {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(getUsers);
+
 
   const onPressFav = () => {
     if(user[0].product_lists.includes(id)) {

@@ -99,6 +99,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#2752e6',
     margin: 10,
     padding: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   Headnotes: {
     fontSize: 18,

@@ -16,7 +16,7 @@ const getDateToday = () => {
 };
 
 const get7dayAfter = () => {
-  var day = (new Date().getDate() - 7).toLocaleString();
+  var day = (new Date().getDate() - 14).toLocaleString();
   let month = (new Date().getMonth() + 1).toLocaleString();
   
   if (day.length == 1) {

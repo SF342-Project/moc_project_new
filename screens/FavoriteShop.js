@@ -8,7 +8,7 @@ import AppLoader from './AppLoader';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function FavoriteShop() {
+export default function FavoriteShop({navigation}) {
   const user = useSelector(getUsers);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
@@ -64,17 +64,10 @@ export default function FavoriteShop() {
         </View>
         <FlatList
           data={data}
-          ItemSeparatorComponent={FlatListItemSeparator}
           initialNumToRender={3}
           renderItem={({item, index}) => (
             <View>
-              <TouchableOpacity
-                style={{
-                  borderColor: '#fff',
-                  marginBottom: 10,
-                  borderRadius: 10,
-                  padding: 20,
-                }}>
+              <TouchableOpacity style={styles.ShopButton}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{flex: 0.9}}>
                     <Text style={styles.FlatListHead}>{item.ShopName}</Text>
@@ -82,12 +75,12 @@ export default function FavoriteShop() {
                     <Text style={styles.fontReg}>{item.Contact}</Text>
                   </View>
                   <View style={{flex: 0.1}}>
-                      <Icon
-                        name="bookmark"
-                        size={30}
-                        color={'#2752E6'}
-                        style={{alignSelf: 'flex-end'}}
-                      />
+                    <Icon
+                      name="bookmark"
+                      size={30}
+                      color={'#2752E6'}
+                      style={{alignSelf: 'flex-end'}}
+                    />
                   </View>
                 </View>
               </TouchableOpacity>
@@ -123,6 +116,22 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     width: 30,
     height: 30,
+  },
+  ShopButton: {
+    borderColor: '#fff',
+    marginBottom: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    margin: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   welcome: {
     textShadowColor: '#000000',
