@@ -20,7 +20,6 @@ import {LineChart} from 'react-native-chart-kit';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
 import {
   Table,
   TableWrapper,
@@ -30,9 +29,13 @@ import {
   Cols,
   Cell,
 } from 'react-native-table-component';
-import { useDispatch, useSelector } from 'react-redux';
-import { addProuctFavorite, deleteProuctFavorite, getUsers } from '../redux/users/UserSlice';
-import { getInitialDate } from '../redux/users/PriceSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addProuctFavorite,
+  deleteProuctFavorite,
+  getUsers,
+} from '../redux/users/UserSlice';
+import {getCurrentPrice, getInitialDate, getPriceNow} from '../redux/users/PriceSlice';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
@@ -40,20 +43,7 @@ export default function ComparePrice({route, navigation}) {
   const user = useSelector(getUsers);
 
   const initialDate = useSelector(getInitialDate);
-
-  const getDateToday = () => {
-    let day = new Date().getDate().toLocaleString();
-    let month = (new Date().getMonth() + 1).toLocaleString();
-    if (day.length == 1) {
-      day = '0' + day;
-    }
-    if (month.length == 1) {
-      month = '0' + month;
-    }
-    let formatDateText = new Date().getFullYear() + '-' + month + '-' + day;
-
-    return formatDateText;
-  };
+  const currentPrice = useSelector(getCurrentPrice);
 
   const [textStart, setTextStart] = useState(initialDate.start);
   const [textEnd, setTextEnd] = useState(initialDate.end);
@@ -67,7 +57,6 @@ export default function ComparePrice({route, navigation}) {
     textEnd;
 
   const {data, loading, refetch} = useFetch(API_URL);
-
   const [startDate, setStartDate] = useState(new Date());
   const [openStart, setOpenStart] = useState(false);
 
@@ -141,6 +130,7 @@ export default function ComparePrice({route, navigation}) {
   };
 
   useEffect(() => {
+    dispatch(getPriceNow(id));
     if (loading || !loading) {
       chart();
     }
@@ -182,15 +172,15 @@ export default function ComparePrice({route, navigation}) {
 
   const dispatch = useDispatch();
 
-
-
   const onPressFav = () => {
-    if(user[0].product_lists.includes(id)) {
-      dispatch(deleteProuctFavorite({_id: user[0]._id, product_id: id})).unwrap();
+    if (user[0].product_lists.includes(id)) {
+      dispatch(
+        deleteProuctFavorite({_id: user[0]._id, product_id: id}),
+      ).unwrap();
     } else {
       dispatch(addProuctFavorite({_id: user[0]._id, product_id: id})).unwrap();
     }
-  }
+  };
 
   return (
     <>
@@ -215,7 +205,7 @@ export default function ComparePrice({route, navigation}) {
             <View style={{flexDirection: 'row'}}>
               <View style={{flex: 0.9}}>
                 <Text style={styles.HeaderContent}>{name}</Text>
-                
+
                 <View style={{flexDirection: 'row'}}>
                   {diffPrice < 0 ? (
                     <Text style={styles.CardPriceDown}>
@@ -231,21 +221,35 @@ export default function ComparePrice({route, navigation}) {
 
                   <Text style={styles.CardUnit}>{data.unit}</Text>
                 </View>
+                {!loading && averagePrice.length > 0 ? (
+                  <View>
+                    <Text style={styles.CardDate}>
+                      สูงสุด {currentPrice.price_max} {data.unit}
+                    </Text>
+                    <Text style={styles.CardDate}>
+                      ต่ำสุด {currentPrice.price_min} {data.unit}
+                    </Text>
+                  </View>
+                ) : null}
+
                 <Text style={styles.CardDate}>
                   {formatDateText(priceDateArr[priceDateArr.length - 1])}
                 </Text>
               </View>
-              <View style={{flex: 0.21, padding:0, alignItems: 'flex-start'}}>
+              <View style={{flex: 0.21, padding: 0, alignItems: 'flex-start'}}>
                 <TouchableOpacity onPress={onPressFav}>
-                <Icon
+                  <Icon
                     name="heart"
                     size={25}
-                    color={user[0].product_lists.includes(id) ? '#e12d2d' : 'darkgrey'}
+                    color={
+                      user[0].product_lists.includes(id)
+                        ? '#e12d2d'
+                        : 'darkgrey'
+                    }
                     style={{alignSelf: 'flex-end'}}
                   />
                 </TouchableOpacity>
               </View>
-  
 
               {percent < 0 ? (
                 <View style={{flex: 0.3}}>
