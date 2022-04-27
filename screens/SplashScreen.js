@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function SplashScreen({navigation}) {
     setTimeout(() => {
-      navigation.navigate('Login');
+      navigation.navigate('Home');
     }, 3000);
   return (
     <SafeAreaView style={styles.container}>
@@ -34,11 +34,13 @@ const styles = StyleSheet.create({
       color: "#fff",
       fontSize: 25,
       paddingTop: 15,
+      fontFamily: 'Prompt-Bold',
 
   },
   subtext: {
     color: "#047FC7",
-    paddingTop: 5
+    paddingTop: 5,
+    fontFamily: 'Prompt-Bold',
 },
 image: {
     width: 150,
