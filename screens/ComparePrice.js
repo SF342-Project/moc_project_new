@@ -35,7 +35,11 @@ import {
   deleteProuctFavorite,
   getUsers,
 } from '../redux/users/UserSlice';
-import {getCurrentPrice, getInitialDate, getPriceNow} from '../redux/users/PriceSlice';
+import {
+  getCurrentPrice,
+  getInitialDate,
+  getPriceNow,
+} from '../redux/users/PriceSlice';
 
 export default function ComparePrice({route, navigation}) {
   const {name, id} = route.params;
@@ -238,16 +242,18 @@ export default function ComparePrice({route, navigation}) {
               </View>
               <View style={{flex: 0.21, padding: 0, alignItems: 'flex-start'}}>
                 <TouchableOpacity onPress={onPressFav}>
-                  <Icon
-                    name="heart"
-                    size={25}
-                    color={
-                      user[0].product_lists.includes(id)
-                        ? '#e12d2d'
-                        : 'darkgrey'
-                    }
-                    style={{alignSelf: 'flex-end'}}
-                  />
+                  {user && user.length > 0 ? (
+                    <Icon
+                      name="heart"
+                      size={25}
+                      color={
+                        user[0].product_lists.includes(id)
+                          ? '#e12d2d'
+                          : 'darkgrey'
+                      }
+                      style={{alignSelf: 'flex-end'}}
+                    />
+                  ) : null}
                 </TouchableOpacity>
               </View>
 

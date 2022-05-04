@@ -186,14 +186,16 @@ export default function MapTongfah({navigation}) {
                     <View style={{flex: 0.1}}>
                       <TouchableOpacity
                         onPress={() => handleFavorite(item.ord)}>
-                        <Icon
-                          name="bookmark"
-                          size={30}
-                          color={
-                            favArr.includes(item.ord) ? '#2752E6' : 'darkgrey'
-                          }
-                          style={{alignSelf: 'flex-end'}}
-                        />
+          
+                          <Icon
+                            name="bookmark"
+                            size={30}
+                            color={
+                              favArr.includes(item.ord) ? '#2752E6' : 'darkgrey'
+                            }
+                            style={{alignSelf: 'flex-end'}}
+                          />
+
                       </TouchableOpacity>
                     </View>
                   </View>
